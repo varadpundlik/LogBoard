@@ -1,6 +1,6 @@
-start "" "path to elastic search bin folder\elasticsearch.bat"
-start "" "path to kibana bin folder\kibana.bat"
-start "" "path to logstash bin folder\logstash.bat" -f logstash.conf --config.reload.automatic
-start "" "path to filebeat folder\filebeat.exe" -e -c filebeat.yml
-cd "path to spring boot project"
+start "" "elasticsearch.bat"
+start "" "kibana.bat"
+@REM start "" "path to logstash bin folder\logstash.bat" -f logstash.conf --config.reload.automatic
+start "" "E:/filebeat/filebeat.exe" -e -c filebeat.yml
+cd "D:/PICT BE CE 24-25/Logs Management Dashboard/spring-boot-logs-management-dashboard"
 mvn spring-boot:run
