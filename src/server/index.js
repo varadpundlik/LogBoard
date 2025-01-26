@@ -1,35 +1,11 @@
 const express = require('express');
-const { Client } = require('@elastic/elasticsearch');
 
-const client = new Client({
-    node: 'http://localhost:9200',
-});
+const { logsRouter } = require('./routes/logRoutes');
 
 const app = express();
-const port = 3000;
+const port = 5000;
 
 app.get('/', (req, res) => res.send('Hello World!'));
-
-app.get('/logs/:index', async (req, res) => {
-    const { index } = req.params;
-    try {
-        const response = await client.search({
-            index,
-            body: {
-                query: {
-                    match_all: {},
-                },
-            },
-        });
-
-        // Access the hits using response.hits.hits
-        const documents = response.hits.hits.map(hit => hit._source);
-
-        res.json(documents);
-    } catch (error) {
-        console.error('Error fetching logs:', error);
-        res.status(500).json({ error: 'An error occurred while fetching logs.' });
-    }
-});
+app.use('/logs', logsRouter);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
