@@ -7,7 +7,6 @@ from elasticsearch import Elasticsearch
 from langchain_ollama import ChatOllama
 import json
 
-
 # Connect to Elasticsearch
 es = Elasticsearch("http://localhost:9200")
 
@@ -51,15 +50,15 @@ prompt_template_summary = PromptTemplate(
     You are an expert at log analysis. Categorize logs into **distinct API operations** and generate a structured JSON output.
     
     Return ONLY JSON in the format:
-    {
+    {{
         "operations": [
-            {
+            {{
                 "operation": "API operation name",
                 "summary": "Brief summary of the operation",
                 "logs": ["log entry 1", "log entry 2"]
-            }
+            }}
         ]
-    }
+    }}
 
     Do NOT include any additional explanation.
     
@@ -67,6 +66,7 @@ prompt_template_summary = PromptTemplate(
     {context}
     """
 )
+
 
 qa_chain_summary = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_summary)
 
@@ -77,11 +77,11 @@ prompt_template_root_cause = PromptTemplate(
     You are an expert in root cause analysis for API logs. Identify the root cause of errors and failures based on patterns in the logs.
     
     Return ONLY JSON in the format:
-    {
+    {{
         "root_cause": "Concise root cause description",
         "evidence": ["Relevant log 1", "Relevant log 2"],
         "recommendation": "Suggested fix or action"
-    }
+    }}
     
     Do NOT include any additional explanation.
     
@@ -90,16 +90,30 @@ prompt_template_root_cause = PromptTemplate(
     """
 )
 
+
 qa_chain_root_cause = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_root_cause)
 
-# Invoke Log Summary with Proper Input
+def extract_json(response):
+    """Extract and parse JSON from the LLM response."""
+    try:
+        # Find the first `{` which starts a JSON block
+        json_start = response.find("{")
+        json_data = response[json_start:].strip()
+
+        # Load JSON
+        parsed_json = json.loads(json_data)
+        return json.dumps(parsed_json, indent=4)  # Pretty print
+    except json.JSONDecodeError:
+        return "Error: Unable to parse JSON from response."
+
+# Invoke Log Summary
 query_logs = {"query": "Summarize the logs"}
 op1 = qa_chain_summary.invoke(query_logs)
-print(op1)
+print("Log Summary Output:\n", extract_json(op1['result']))
 
-print("\n\n\n-----------------------------------\n\n\n")
+print("\n\n-----------------------------------\n\n")
 
-# Invoke Root Cause Analysis with Proper Input
+# Invoke Root Cause Analysis
 query_root_cause = {"query": "Identify the root cause of the errors"}
 op2 = qa_chain_root_cause.invoke(query_root_cause)
-print(op2)
+print("Root Cause Analysis Output:\n", extract_json(op2['result']))
