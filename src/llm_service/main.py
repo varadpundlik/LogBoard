@@ -1,3 +1,5 @@
+from fastapi import FastAPI
+from pydantic import BaseModel
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.schema import Document
@@ -6,6 +8,8 @@ from langchain.prompts import PromptTemplate
 from elasticsearch import Elasticsearch
 from langchain_ollama import ChatOllama
 import json
+
+app = FastAPI()
 
 # Connect to Elasticsearch
 es = Elasticsearch("http://localhost:9200")
@@ -23,7 +27,8 @@ def fetch_logs(index_name):
     return docs
 
 # Fetch logs
-logs_docs = fetch_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
+# logs_docs = fetch_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
+logs_docs=fetch_logs(".ds-filebeat-8.17.1-2025.02.04-000001")
 
 # Create embeddings
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")  
@@ -98,17 +103,39 @@ def extract_json(response):
         # Load JSON
         parsed_json = json.loads(json_data)
         return json.dumps(parsed_json, indent=4)  # Pretty print
+        # return parsed_json
     except json.JSONDecodeError:
         return "Error: Unable to parse JSON from response."
 
-# Invoke Log Summary
-query_logs = {"query": "Summarize the logs"}
-op1 = qa_chain_summary.invoke(query_logs)
-print("Log Summary Output:\n", extract_json(op1['result']))
+# # Invoke Log Summary
+# query_logs = {"query": "Summarize the logs"}
+# op1 = qa_chain_summary.invoke(query_logs)
+# print("Log Summary Output:\n", extract_json(op1['result']))
 
-print("\n\n-----------------------------------\n\n")
+# print("\n\n-----------------------------------\n\n")
 
-# Invoke Root Cause Analysis
-query_root_cause = {"query": "Identify the root cause of the errors"}
-op2 = qa_chain_root_cause.invoke(query_root_cause)
-print("Root Cause Analysis Output:\n", extract_json(op2['result']))
+# # Invoke Root Cause Analysis
+# query_root_cause = {"query": "Identify the root cause of the errors"}
+# op2 = qa_chain_root_cause.invoke(query_root_cause)
+# print("Root Cause Analysis Output:\n", extract_json(op2['result']))
+
+# Request model for API inputs
+# class QueryRequest(BaseModel):
+#     query: str
+
+@app.post("/summarize_logs")
+def summarize_logs():
+    """Endpoint to summarize logs"""
+    query = {"query": "Summarize the logs"}  # Hardcoded query
+    response = qa_chain_summary.invoke(query)
+    print("Raw LLM Response:", response["result"])
+    return extract_json(response["result"])
+
+@app.post("/root_cause_analysis")
+def root_cause_analysis():
+    """Endpoint to perform root cause analysis on logs."""
+    query = {"query":"Identify the root cause of the errors"}
+    response = qa_chain_root_cause.invoke(query)
+    return extract_json(response["result"])
+
+# Run the API with: uvicorn main:app --host 0.0.0.0 --port 5001 --reload
