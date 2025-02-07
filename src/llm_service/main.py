@@ -26,6 +26,7 @@ def fetch_logs(index_name):
 logs_docs = fetch_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
 
 # Create embeddings
+embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")  
 vectorstore = FAISS.from_documents(logs_docs, embedding=embedding_model)
 # Set up the retriever
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})  
