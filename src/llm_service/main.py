@@ -1,4 +1,4 @@
-from langchain_community.vectorstores import ElasticsearchStore
+from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.schema import Document
 from langchain.chains import RetrievalQA
@@ -25,14 +25,8 @@ def fetch_logs(index_name):
 # Fetch logs
 logs_docs = fetch_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
 
-# Create embeddings and store in Elasticsearch
-vectorstore = ElasticsearchStore.from_documents(
-    logs_docs,
-    embedding=HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"),  
-    index_name="logs_vector_index",
-    es_connection=es
-)
-
+# Create embeddings
+vectorstore = FAISS.from_documents(logs_docs, embedding=embedding_model)
 # Set up the retriever
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})  
 
