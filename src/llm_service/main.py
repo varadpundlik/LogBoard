@@ -7,6 +7,7 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from elasticsearch import Elasticsearch
 from langchain_ollama import ChatOllama
+from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 import json
 
 app = FastAPI()
@@ -27,8 +28,8 @@ def fetch_logs(index_name):
     return docs
 
 # Fetch logs
-# logs_docs = fetch_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
-logs_docs=fetch_logs(".ds-filebeat-8.17.1-2025.02.04-000001")
+logs_docs = fetch_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
+# logs_docs=fetch_logs(".ds-filebeat-8.17.1-2025.02.04-000001")
 
 # Create embeddings
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")  
@@ -43,13 +44,30 @@ llm_engine = ChatOllama(
     temperature=0.3
 )
 
+# Define response schemas for log summarization
+summary_response_schemas = [
+    ResponseSchema(name="operations", description="List of API operations", type="list")
+]
+
+# Define response schemas for root cause analysis
+root_cause_response_schemas = [
+    ResponseSchema(name="root_cause", description="Concise root cause description", type="string"),
+    ResponseSchema(name="evidence", description="List of relevant logs", type="list"),
+    ResponseSchema(name="recommendation", description="Suggested fix or action", type="string")
+]
+
+# Create output parsers
+summary_output_parser = StructuredOutputParser.from_response_schemas(summary_response_schemas)
+root_cause_output_parser = StructuredOutputParser.from_response_schemas(root_cause_response_schemas)
+
+# Log Summarization Prompt
 # Log Summarization Prompt
 prompt_template_summary = PromptTemplate(
     input_variables=["context"],  
     template="""
     You are an expert at log analysis. Categorize logs into **distinct API operations** and generate a structured JSON output.
     
-    Return ONLY JSON in the format:
+    Return JSON in the format:
     {{
         "operations": [
             {{
@@ -64,11 +82,11 @@ prompt_template_summary = PromptTemplate(
     
     Logs:
     {context}
-    """
+    
+    {format_instructions}
+    """,
+    partial_variables={"format_instructions": summary_output_parser.get_format_instructions()}
 )
-
-
-qa_chain_summary = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_summary)
 
 # Root Cause Analysis Prompt
 prompt_template_root_cause = PromptTemplate(
@@ -87,10 +105,13 @@ prompt_template_root_cause = PromptTemplate(
     
     Logs:
     {context}
-    """
+    
+    {format_instructions}
+    """,
+    partial_variables={"format_instructions": root_cause_output_parser.get_format_instructions()}
 )
 
-
+qa_chain_summary = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_summary)
 qa_chain_root_cause = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_root_cause)
 
 def extract_json(response):
@@ -128,14 +149,15 @@ def summarize_logs():
     """Endpoint to summarize logs"""
     query = {"query": "Summarize the logs"}  # Hardcoded query
     response = qa_chain_summary.invoke(query)
-    print("Raw LLM Response:", response["result"])
-    return extract_json(response["result"])
+    parsed_response = summary_output_parser.parse(response["result"])
+    return parsed_response
 
 @app.post("/root_cause_analysis")
 def root_cause_analysis():
     """Endpoint to perform root cause analysis on logs."""
     query = {"query":"Identify the root cause of the errors"}
     response = qa_chain_root_cause.invoke(query)
-    return extract_json(response["result"])
+    parsed_response = root_cause_output_parser.parse(response["result"])
+    return parsed_response
 
 # Run the API with: uvicorn main:app --host 0.0.0.0 --port 5001 --reload
