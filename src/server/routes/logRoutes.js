@@ -1,7 +1,13 @@
-const logsRouter= require('express').Router();
+const logsRouter = require("express").Router();
 
-const { fetchLogs } = require('../controller/logs');
+const {
+  fetchLogs,
+  searchLogs,
+  logsSummarization,
+} = require("../controller/logs");
 
-logsRouter.get('/:index', fetchLogs);
+logsRouter.get("/summarize", logsSummarization);
+logsRouter.get("/:index", fetchLogs);
+logsRouter.post("/:index/search", searchLogs);
 
-module.exports ={ logsRouter };
+module.exports = { logsRouter };
