@@ -46,7 +46,28 @@ llm_engine = ChatOllama(
 
 # Define response schemas for log summarization
 summary_response_schemas = [
-    ResponseSchema(name="operations", description="List of API operations", type="list")
+    ResponseSchema(
+        name="operations",
+        description="List of API operations, where each entry contains an operation name, summary, and logs",
+        type="list",
+        items=[
+            {
+                "name": "operation",
+                "description": "API operation name",
+                "type": "string",
+            },
+            {
+                "name": "summary",
+                "description": "Brief summary of the operation",
+                "type": "string",
+            },
+            {
+                "name": "logs",
+                "description": "List of log entries for the operation",
+                "type": "list",
+            },
+        ],
+    )
 ]
 
 # Define response schemas for root cause analysis
@@ -65,7 +86,7 @@ root_cause_output_parser = StructuredOutputParser.from_response_schemas(root_cau
 prompt_template_summary = PromptTemplate(
     input_variables=["context"],  
     template="""
-    You are an expert at log analysis. Categorize logs into **distinct API operations** and generate a structured JSON output.
+    You are an expert at log analysis. Categorize logs into **distinct API operations** and generate a structured JSON output make sure that each log entry is classified into an operation without leaving anything unclassified.
     
     Return JSON in the format:
     {{
@@ -149,6 +170,7 @@ def summarize_logs():
     """Endpoint to summarize logs"""
     query = {"query": "Summarize the logs"}  # Hardcoded query
     response = qa_chain_summary.invoke(query)
+    print("Log Summary Output:\n",response['result'])
     parsed_response = summary_output_parser.parse(response["result"])
     return parsed_response
 
@@ -157,6 +179,7 @@ def root_cause_analysis():
     """Endpoint to perform root cause analysis on logs."""
     query = {"query":"Identify the root cause of the errors"}
     response = qa_chain_root_cause.invoke(query)
+    print("Root Cause Analysis Output:\n",response['result'])
     parsed_response = root_cause_output_parser.parse(response["result"])
     return parsed_response
 
