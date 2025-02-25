@@ -35,7 +35,7 @@ logs_docs = fetch_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")  
 vectorstore = FAISS.from_documents(logs_docs, embedding=embedding_model)
 # Set up the retriever
-retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})  
+retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": len(logs_docs)})  
 
 # Initialize the LLM (Ollama with DeepSeek model)
 llm_engine = ChatOllama(
