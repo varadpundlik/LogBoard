@@ -14,6 +14,19 @@ const ask = async (path) => {
   }
 };
 
+const askAutomation = async (path, data) => {
+  try {
+    const response = await axios.post(URL + path, data);
+    if (response.status !== 200) {
+      return [{ error: "An error occurred while fetching" }];
+    }
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 module.exports = {
   ask,
+  askAutomation
 };

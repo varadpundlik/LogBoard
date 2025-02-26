@@ -1,9 +1,11 @@
+require('dotenv').config({path: '../config.env'});
 const axios = require('axios');
 const fs = require('fs');
+const {askAutomation} = require('../utils/llm');
 
-const LOG_FILE = '/var/logs/app.log';
 const JENKINS_BASE_URL = 'http://localhost:8800/job/';
-const JENKINS_AUTH = { username: 'your-jenkins-user', password: 'your-api-token' };
+const JENKINS_API_TOKEN = process.env.JENKINS_API_TOKEN;
+const JENKINS_AUTH = { username: 'varadpundlik', password: JENKINS_API_TOKEN };
 
 const ERROR_TO_JOB_MAPPING = {
     'Crash': 'RestartServer',
@@ -11,19 +13,22 @@ const ERROR_TO_JOB_MAPPING = {
     'Database Connection Error': 'RestartDatabase',
 };
 
-function checkLogs() {
-    const logs = fs.readFileSync(LOG_FILE, 'utf8');
-
-    for (const [error, job] of Object.entries(ERROR_TO_JOB_MAPPING)) {
-        if (logs.includes(error)) {
-            console.log(`Detected: ${error}, triggering Jenkins job: ${job}`);
-            triggerJenkinsJob(job);
-            return; 
+function checkLogs(req,res) {
+    try{
+        const job=askAutomation('/automation',ERROR_TO_JOB_MAPPING);
+        if(job=="NONE"){
+            res.json({message:"No error found"});
         }
+        else{
+            triggerJenkinsJob(job);
+            res.json({message:`Job triggered ${job}`});
+        }
+    }
+    catch(err){
+        console.error(err);
     }
 }
 
-// Function to trigger the correct Jenkins job
 async function triggerJenkinsJob(jobName) {
     try {
         const response = await axios.post(`${JENKINS_BASE_URL}${jobName}/build`, {}, { auth: JENKINS_AUTH });
@@ -33,5 +38,7 @@ async function triggerJenkinsJob(jobName) {
     }
 }
 
-// Check logs every 30 seconds
-setInterval(checkLogs, 30000);
+module.exports={
+    checkLogs
+}
+
