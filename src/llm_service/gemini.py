@@ -6,11 +6,14 @@ from langchain.schema import Document
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from elasticsearch import Elasticsearch
-from langchain_ollama import ChatOllama
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 from pydantic import BaseModel
 from typing import Dict
 import json
+import google.generativeai as genai  # Import Gemini API
+from langchain_core.runnables import Runnable
+import os
+import dotenv
 
 app = FastAPI()
 
@@ -31,7 +34,6 @@ def fetch_logs(index_name):
 
 # Fetch logs
 logs_docs = fetch_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
-# logs_docs=fetch_logs(".ds-filebeat-8.17.1-2025.02.04-000001")
 
 # Create embeddings
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")  
@@ -39,12 +41,22 @@ vectorstore = FAISS.from_documents(logs_docs, embedding=embedding_model)
 # Set up the retriever
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": len(logs_docs)})  
 
-# Initialize the LLM (Ollama with DeepSeek model)
-llm_engine = ChatOllama(
-    model="deepseek-r1:1.5b",  
-    base_url="http://localhost:11434",
-    temperature=0.3
-)
+# Custom Gemini Runnable Wrapper
+class GeminiRunnable(Runnable):
+    def __init__(self, model):
+        self.model = model
+
+    def invoke(self, input_text: str, **kwargs):  # Accept **kwargs to avoid errors
+        response = self.model.generate_content(input_text)
+        return response.text
+
+API_KEY=None
+# Initialize the Gemini API
+genai.configure(api_key=API_KEY)  # Replace with your Gemini API key
+gemini_model = genai.GenerativeModel('gemini-pro')  # Use the Gemini Pro model
+
+# Wrap the Gemini model in a LangChain-compatible Runnable
+llm_engine = GeminiRunnable(gemini_model)
 
 # Define response schemas for log summarization
 summary_response_schemas = [
@@ -92,7 +104,6 @@ summary_output_parser = StructuredOutputParser.from_response_schemas(summary_res
 root_cause_output_parser = StructuredOutputParser.from_response_schemas(root_cause_response_schemas)
 automation_output_parser = StructuredOutputParser.from_response_schemas(automation_response_schemas)
 
-# Log Summarization Prompt
 # Log Summarization Prompt
 prompt_template_summary = PromptTemplate(
     input_variables=["context"],  
@@ -143,7 +154,6 @@ prompt_template_root_cause = PromptTemplate(
     partial_variables={"format_instructions": root_cause_output_parser.get_format_instructions()}
 )
 
-
 automation_prompt_template = PromptTemplate(
     input_variables=["context", "error_to_job_mapping"],
     template="""
@@ -174,6 +184,7 @@ automation_prompt_template = PromptTemplate(
     partial_variables={"format_instructions": automation_output_parser.get_format_instructions()}
 )
 
+# Create RetrievalQA chains
 qa_chain_summary = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_summary)
 qa_chain_root_cause = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_root_cause)
 qa_chain_automation = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=automation_prompt_template)
@@ -188,7 +199,6 @@ def extract_json(response):
         # Load JSON
         parsed_json = json.loads(json_data)
         return json.dumps(parsed_json, indent=4)  # Pretty print
-        # return parsed_json
     except json.JSONDecodeError:
         return "Error: Unable to parse JSON from response."
 
@@ -197,16 +207,16 @@ def summarize_logs():
     """Endpoint to summarize logs"""
     query = {"query": "Summarize the logs"}  # Hardcoded query
     response = qa_chain_summary.invoke(query)
-    print("Log Summary Output:\n",response['result'])
+    print("Log Summary Output:\n", response['result'])
     parsed_response = summary_output_parser.parse(response["result"])
     return parsed_response
 
 @app.post("/root_cause_analysis")
 def root_cause_analysis():
     """Endpoint to perform root cause analysis on logs."""
-    query = {"query":"Identify the root cause of the errors"}
+    query = {"query": "Identify the root cause of the errors"}
     response = qa_chain_root_cause.invoke(query)
-    print("Root Cause Analysis Output:\n",response['result'])
+    print("Root Cause Analysis Output:\n", response['result'])
     parsed_response = root_cause_output_parser.parse(response["result"])
     return parsed_response
 
@@ -218,7 +228,8 @@ async def automation(request: AutomationRequest):
     """Recommends an automation job based on logs and provided error-job mapping."""
     query = {"query": "Recommend an automation job"}
     response = qa_chain_automation.invoke(query)
-    print("Automation Output:\n",response['result'])
+    print("Automation Output:\n", response['result'])
     parsed_response = automation_output_parser.parse(response["result"])
     return parsed_response
-# Run the API with: uvicorn main:app --host 0.0.0.0 --port 5001 --reload
+
+# Run the API with: uvicorn gemini:app --host 0.0.0.0 --port 5001 --reload
