@@ -12,8 +12,6 @@ from typing import Dict
 import json
 import google.generativeai as genai  # Import Gemini API
 from langchain_core.runnables import Runnable
-import os
-import dotenv
 
 app = FastAPI()
 
@@ -46,13 +44,13 @@ class GeminiRunnable(Runnable):
     def __init__(self, model):
         self.model = model
 
-    def invoke(self, input_text: str, **kwargs):  # Accept **kwargs to avoid errors
+    def invoke(self, input_text: str, **kwargs):
+        # Use the Gemini API to generate a response
         response = self.model.generate_content(input_text)
         return response.text
 
-API_KEY=None
 # Initialize the Gemini API
-genai.configure(api_key=API_KEY)  # Replace with your Gemini API key
+genai.configure(api_key="YOUR_GEMINI_API_KEY")  # Replace with your Gemini API key
 gemini_model = genai.GenerativeModel('gemini-pro')  # Use the Gemini Pro model
 
 # Wrap the Gemini model in a LangChain-compatible Runnable
