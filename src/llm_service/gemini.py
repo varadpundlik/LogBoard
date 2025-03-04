@@ -6,14 +6,12 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from elasticsearch import Elasticsearch
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
-from typing import Dict
+from langchain_google_genai import ChatGoogleGenerativeAI
+import threading
+import time
 import json
-import google.generativeai as genai  # Import Gemini API
-from langchain_core.runnables import Runnable
 import getpass
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
-
 
 if "GOOGLE_API_KEY" not in os.environ:
     os.environ["GOOGLE_API_KEY"] = getpass.getpass("Enter your Google AI API key: ")
@@ -23,27 +21,20 @@ app = FastAPI()
 # Connect to Elasticsearch
 es = Elasticsearch("http://localhost:9200")
 
-# Fetch logs from Elasticsearch
-def fetch_logs(index_name):
-    query = {"size": 1000, "query": {"match_all": {}}}
-    response = es.search(index=index_name, body=query)
-    
-    docs = [
-        Document(page_content=hit["_source"]["message"], metadata={"timestamp": hit["_source"]["@timestamp"]})
-        for hit in response["hits"]["hits"]
-    ]
-    
-    return docs
+# Store latest processed results
+latest_results = {
+    "summary": None,
+    "root_cause": None,
+    "automation": None
+}
 
-# Fetch logs
-logs_docs = fetch_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
+# Track last processed log timestamp
+last_processed_timestamp = None
 
-# Create embeddings
-embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")  
-vectorstore = FAISS.from_documents(logs_docs, embedding=embedding_model)
-# Set up the retriever
-retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": len(logs_docs)})  
+# Load embedding model
+embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
+# Load LLM
 llm_engine = ChatGoogleGenerativeAI(
     model="gemini-1.5-pro",
     temperature=0,
@@ -52,7 +43,7 @@ llm_engine = ChatGoogleGenerativeAI(
     max_retries=2
 )
 
-# Define response schemas for log summarization
+# Define Output Parsers
 summary_response_schemas = [
     ResponseSchema(
         name="operations",
@@ -178,49 +169,67 @@ automation_prompt_template = PromptTemplate(
     partial_variables={"format_instructions": automation_output_parser.get_format_instructions()}
 )
 
-# Create RetrievalQA chains
-qa_chain_summary = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_summary)
-qa_chain_root_cause = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_root_cause)
-qa_chain_automation = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=automation_prompt_template)
 
-def extract_json(response):
-    """Extract and parse JSON from the LLM response."""
-    try:
-        # Find the first `{` which starts a JSON block
-        json_start = response.find("{")
-        json_data = response[json_start:].strip()
+# Function to fetch new logs since last processed timestamp
+def fetch_new_logs(index_name):
+    global last_processed_timestamp
 
-        # Load JSON
-        parsed_json = json.loads(json_data)
-        return json.dumps(parsed_json, indent=4)  # Pretty print
-    except json.JSONDecodeError:
-        return "Error: Unable to parse JSON from response."
+    query = {"size": 1000, "query": {"range": {"@timestamp": {"gt": last_processed_timestamp}}}} if last_processed_timestamp else {"size": 1000, "query": {"match_all": {}}}
+    response = es.search(index=index_name, body=query)
 
-@app.post("/summarize_logs")
-def summarize_logs():
-    """Endpoint to summarize logs"""
-    query = {"query": "Summarize the logs"}  # Hardcoded query
-    response = qa_chain_summary.invoke(query)
-    print("Log Summary Output:\n", response['result'])
-    parsed_response = summary_output_parser.parse(response["result"])
-    return parsed_response
+    logs = []
+    for hit in response["hits"]["hits"]:
+        logs.append(Document(page_content=hit["_source"]["message"], metadata={"timestamp": hit["_source"]["@timestamp"]}))
+    
+    # Update last processed timestamp
+    if logs:
+        last_processed_timestamp = logs[-1].metadata["timestamp"]
 
-@app.post("/root_cause_analysis")
-def root_cause_analysis():
-    """Endpoint to perform root cause analysis on logs."""
-    query = {"query": "Identify the root cause of the errors"}
-    response = qa_chain_root_cause.invoke(query)
-    print("Root Cause Analysis Output:\n", response['result'])
-    parsed_response = root_cause_output_parser.parse(response["result"])
-    return parsed_response
+    return logs
 
-@app.post("/automation")
-async def automation():
-    """Recommends an automation job based on logs and provided error-job mapping."""
-    query = {"query": "Recommend an automation job"}
-    response = qa_chain_automation.invoke(query)
-    print("Automation Output:\n", response['result'])
-    parsed_response = automation_output_parser.parse(response["result"])
-    return parsed_response
+# Background process function
+def process_logs():
+    global latest_results
 
-# Run the API with: uvicorn gemini:app --host 0.0.0.0 --port 5001 --reload
+    while True:
+        # Fetch new logs
+        logs_docs = fetch_new_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
+
+        if not logs_docs:
+            print("No new logs found.")
+            time.sleep(120)  # Wait 2 minutes before checking again
+            continue
+
+        # Create FAISS retriever
+        vectorstore = FAISS.from_documents(logs_docs, embedding=embedding_model)
+        retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": len(logs_docs)})  
+
+        # Create Retrieval Chains
+        qa_chain_summary = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_summary)
+        qa_chain_root_cause = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_root_cause)
+        qa_chain_automation = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=automation_prompt_template)
+
+        # Run all operations and update results
+        latest_results["summary"] = summary_output_parser.parse(qa_chain_summary.invoke({"query": "Summarize logs"})["result"])
+        latest_results["root_cause"] = root_cause_output_parser.parse(qa_chain_root_cause.invoke({"query": "Find root cause"})["result"])
+        latest_results["automation"] = automation_output_parser.parse(qa_chain_automation.invoke({"query": "Determine automation job"})["result"])
+
+        print("Updated Results:", latest_results)
+
+        time.sleep(120)  # Fetch logs every 2 minutes to fit in Gemini free tier
+
+# API Endpoints
+@app.get("/summary")
+def get_summary():
+    return latest_results["summary"]
+
+@app.get("/root_cause")
+def get_root_cause():
+    return latest_results["root_cause"]
+
+@app.get("/automation")
+def get_automation():
+    return latest_results["automation"]
+
+# Start Background Thread
+threading.Thread(target=process_logs, daemon=True).start()
