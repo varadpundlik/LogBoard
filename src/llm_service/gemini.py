@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.schema import Document
@@ -7,11 +6,17 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from elasticsearch import Elasticsearch
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
-from pydantic import BaseModel
 from typing import Dict
 import json
 import google.generativeai as genai  # Import Gemini API
 from langchain_core.runnables import Runnable
+import getpass
+import os
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+
+if "GOOGLE_API_KEY" not in os.environ:
+    os.environ["GOOGLE_API_KEY"] = getpass.getpass("Enter your Google AI API key: ")
 
 app = FastAPI()
 
@@ -39,22 +44,13 @@ vectorstore = FAISS.from_documents(logs_docs, embedding=embedding_model)
 # Set up the retriever
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": len(logs_docs)})  
 
-# Custom Gemini Runnable Wrapper
-class GeminiRunnable(Runnable):
-    def __init__(self, model):
-        self.model = model
-
-    def invoke(self, input_text: str, **kwargs):
-        # Use the Gemini API to generate a response
-        response = self.model.generate_content(input_text)
-        return response.text
-
-# Initialize the Gemini API
-genai.configure(api_key="YOUR_GEMINI_API_KEY")  # Replace with your Gemini API key
-gemini_model = genai.GenerativeModel('gemini-pro')  # Use the Gemini Pro model
-
-# Wrap the Gemini model in a LangChain-compatible Runnable
-llm_engine = GeminiRunnable(gemini_model)
+llm_engine = ChatGoogleGenerativeAI(
+    model="gemini-1.5-pro",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2
+)
 
 # Define response schemas for log summarization
 summary_response_schemas = [
@@ -218,11 +214,8 @@ def root_cause_analysis():
     parsed_response = root_cause_output_parser.parse(response["result"])
     return parsed_response
 
-class AutomationRequest(BaseModel):
-    error_to_job_mapping: Dict[str, str]
-
 @app.post("/automation")
-async def automation(request: AutomationRequest):
+async def automation():
     """Recommends an automation job based on logs and provided error-job mapping."""
     query = {"query": "Recommend an automation job"}
     response = qa_chain_automation.invoke(query)
