@@ -12,6 +12,17 @@ import time
 import json
 import getpass
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Get the API key from environment variables
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
+if not GOOGLE_API_KEY:
+    raise ValueError("GOOGLE_API_KEY is missing. Please set it in the .env file.")
+
+os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY 
 
 if "GOOGLE_API_KEY" not in os.environ:
     os.environ["GOOGLE_API_KEY"] = getpass.getpass("Enter your Google AI API key: ")
@@ -19,7 +30,7 @@ if "GOOGLE_API_KEY" not in os.environ:
 app = FastAPI()
 
 # Connect to Elasticsearch
-es = Elasticsearch("http://localhost:9200")
+es = Elasticsearch("https://da6d-103-150-139-92.ngrok-free.app/")
 
 # Store latest processed results
 latest_results = {
