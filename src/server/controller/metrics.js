@@ -1,8 +1,10 @@
 const { Client } = require("@elastic/elasticsearch");
+const config = require("../config/config");
 
 const client = new Client({
-  node: "http://localhost:9200",
+  node: config.elasticsearch_endpoint,
 });
+
 
 const fetchMetrics = async (req, res) => {
   const { index } = req.params;

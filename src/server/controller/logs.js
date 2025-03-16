@@ -1,8 +1,9 @@
 const { Client } = require("@elastic/elasticsearch");
 const { ask } = require("../utils/llm");
+const config = require("../config/config");
 
 const client = new Client({
-  node: "http://localhost:9200",
+  node: config.elasticsearch_endpoint,
 });
 
 const fetchLogs = async (req, res) => {
