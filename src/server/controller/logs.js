@@ -68,7 +68,7 @@ const searchLogs = async (req, res) => {
 
 const logsSummarization = async (req, res) => {
   try {
-    const response = await ask(`summarize_logs`);
+    const response = await ask(`summary`);
     res.json(response);
   } catch (error) {
     console.error("Error summarizing logs:", error);

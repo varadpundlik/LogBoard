@@ -1,7 +1,7 @@
 require('dotenv').config({path: '../config.env'});
 const axios = require('axios');
 const fs = require('fs');
-const {askAutomation} = require('../utils/llm');
+const {ask} = require('../utils/llm');
 
 const JENKINS_BASE_URL = 'http://localhost:8800/job/';
 const JENKINS_API_TOKEN = process.env.JENKINS_API_TOKEN;
@@ -13,10 +13,11 @@ const ERROR_TO_JOB_MAPPING = {
     'Database Connection Error': 'RestartDatabase',
 };
 
-function checkLogs(req,res) {
+async function checkLogs(req,res) {
     try{
-        const job=askAutomation('/automation',ERROR_TO_JOB_MAPPING);
-        if(job=="NONE"){
+        const job=await ask('automation');
+        console.log(job);
+        if(job.job=="None"){
             res.json({message:"No error found"});
         }
         else{
