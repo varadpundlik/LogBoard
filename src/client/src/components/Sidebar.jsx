@@ -6,10 +6,10 @@ import styles from "./Sidebar.module.css"; // Import the CSS module
 
 const SIDEBAR_ITEMS = [
 	{ name: "Overview", icon: BarChart2, color: "#6366f1", href: "/" },
-	{ name: "Products", icon: ShoppingBag, color: "#8B5CF6", href: "/products" },
-	{ name: "Users", icon: Users, color: "#EC4899", href: "/users" },
-	{ name: "Sales", icon: DollarSign, color: "#10B981", href: "/sales" },
-	{ name: "Orders", icon: ShoppingCart, color: "#F59E0B", href: "/orders" },
+	{ name: "Logs Explorer", icon: ShoppingBag, color: "#8B5CF6", href: "/logs" },
+	{ name: "System Metrics", icon: Users, color: "#EC4899", href: "/users" },
+	{ name: "Alerts", icon: DollarSign, color: "#10B981", href: "/sales" },
+	{ name: "Root Cause Analysis", icon: ShoppingCart, color: "#F59E0B", href: "/orders" },
 	{ name: "Analytics", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },
 	{ name: "Settings", icon: Settings, color: "#6EE7B7", href: "/settings" },
 ];
@@ -20,7 +20,7 @@ const Sidebar = () => {
 	return (
 		<motion.div
 			className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}
-			animate={{ width: isSidebarOpen ? 180 : 80 }}
+			animate={{ width: isSidebarOpen ? 250 : 80 }}
 		>
 			<div className={styles.sidebarContainer}>
 				<motion.button
@@ -36,7 +36,7 @@ const Sidebar = () => {
 					{SIDEBAR_ITEMS.map((item) => (
 						<Link key={item.href} to={item.href}>
 							<motion.div className={styles.navItem}>
-								<item.icon size={20} style={{ color: item.color, minWidth: "20px" }} />
+								<item.icon size={30} style={{ color: item.color, minWidth: "20px" }} />
 								<AnimatePresence>
 									{isSidebarOpen && (
 										<motion.span

@@ -11,7 +11,7 @@ const LogsTable = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const response = await fetch("http://localhost:5000/logs/.ds-filebeat-8.17.1-2025.02.04-000001");
+        const response = await fetch("https://logboard-1.onrender.com/logs/.ds-filebeat-8.17.0-2025.02.09-000002");
         if (!response.ok) throw new Error("Failed to fetch logs");
 
         const data = await response.json();
