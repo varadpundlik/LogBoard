@@ -6,7 +6,7 @@ const { rcaRouter } = require("./routes/rca");
 const { automationRouter } = require("./routes/automation");
 const cors = require("cors");
 const app = express();
-const port = 5000;
+const port = 6000;
 
 app.use(cors({ origin: "http://localhost:5173" }));
 

@@ -12,6 +12,17 @@ import time
 import json
 import getpass
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Get the API key from environment variables
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
+if not GOOGLE_API_KEY:
+    raise ValueError("GOOGLE_API_KEY is missing. Please set it in the .env file.")
+
+os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY 
 
 if "GOOGLE_API_KEY" not in os.environ:
     os.environ["GOOGLE_API_KEY"] = getpass.getpass("Enter your Google AI API key: ")
@@ -19,7 +30,7 @@ if "GOOGLE_API_KEY" not in os.environ:
 app = FastAPI()
 
 # Connect to Elasticsearch
-es = Elasticsearch("http://localhost:9200")
+es = Elasticsearch("https://tetra-mutual-kit.ngrok-free.app/")  # Replace with your own Elasticsearch URL
 
 # Store latest processed results
 latest_results = {
@@ -193,7 +204,7 @@ def process_logs():
 
     while True:
         # Fetch new logs
-        logs_docs = fetch_new_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
+        logs_docs = fetch_new_logs(".ds-filebeat-8.17.0-2025.02.09-000002")
 
         if not logs_docs:
             print("No new logs found.")
@@ -216,7 +227,7 @@ def process_logs():
 
         print("Updated Results:", latest_results)
 
-        time.sleep(120)  # Fetch logs every 2 minutes to fit in Gemini free tier
+        time.sleep(3600)  # Fetch logs every 2 minutes to fit in Gemini free tier
 
 # API Endpoints
 @app.get("/summary")
