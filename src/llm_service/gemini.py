@@ -30,7 +30,7 @@ if "GOOGLE_API_KEY" not in os.environ:
 app = FastAPI()
 
 # Connect to Elasticsearch
-es = Elasticsearch("https://579b-103-150-139-92.ngrok-free.app/")
+es = Elasticsearch("https://tetra-mutual-kit.ngrok-free.app/")  # Replace with your own Elasticsearch URL
 
 # Store latest processed results
 latest_results = {
