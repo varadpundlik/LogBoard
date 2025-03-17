@@ -1,0 +1,26 @@
+# ============================== Filebeat inputs ===============================
+filebeat.inputs:
+- type: filestream
+  id: my-testspringbootlogs
+  enabled: true
+  paths:
+    - "D:/PICT BE CE 24-25/Logs Management Dashboard/simple-note/backend/logs/application_logs.log"
+
+# ================================== Outputs ===================================
+output.elasticsearch:
+  # Bonsai.io Elasticsearch endpoint
+  hosts: ["https://your-bonsai-cluster.bonsaisearch.net:443"]
+
+  # Use API key authentication
+  api_key: "your_access_key:your_secret_key"
+
+  # Use HTTPS
+  protocol: "https"
+
+# ================================= Processors =================================
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
