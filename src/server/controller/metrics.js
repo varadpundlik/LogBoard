@@ -1,10 +1,17 @@
 const { Client } = require("@elastic/elasticsearch");
 const config = require("../config/config");
 
+// const client = new Client({
+//   node: config.elasticsearch_endpoint,
+// });
+
 const client = new Client({
   node: config.elasticsearch_endpoint,
+  auth: {
+    username: config.elasticsearch_access_key,
+    password: config.elasticsearch_secret_key,
+  },
 });
-
 
 const fetchMetrics = async (req, res) => {
   const { index } = req.params;
