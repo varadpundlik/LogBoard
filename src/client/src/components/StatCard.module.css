@@ -1,0 +1,40 @@
+/* StatCard.module.css */
+
+/* Card container */
+.statCard {
+    background-color: rgba(31, 41, 55, 0.8); /* Tailwind bg-gray-800 with opacity */
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Tailwind shadow-lg */
+    border-radius: 12px; /* Tailwind rounded-xl */
+    border: 1px solid #374151; /* Tailwind border-gray-700 */
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Card inner content */
+  .cardContent {
+    padding: 20px;
+  }
+  
+  /* Card header (icon + name) */
+  .cardHeader {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem; /* Tailwind text-sm */
+    font-weight: 500;
+    color: #9ca3af; /* Tailwind text-gray-400 */
+  }
+  
+  /* Card icon */
+  .cardIcon {
+    margin-right: 8px;
+  }
+  
+  /* Card value */
+  .cardValue {
+    margin-top: 4px;
+    font-size: 1.875rem; /* Tailwind text-3xl */
+    font-weight: 600;
+    color: #f3f4f6; /* Tailwind text-gray-100 */
+  }
+  

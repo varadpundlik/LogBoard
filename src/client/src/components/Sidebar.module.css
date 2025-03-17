@@ -1,0 +1,70 @@
+/* Sidebar.module.css */
+
+/* Sidebar container */
+.sidebar {
+    position: relative;
+    z-index: 10;
+    transition: all 0.3s ease-in-out;
+    flex-shrink: 0;
+  }
+  
+  /* Sidebar open and closed states */
+  .sidebarOpen {
+    width: 200px;
+  }
+  
+  .sidebarClosed {
+    width: 80px;
+  }
+  
+  /* Sidebar inner container */
+  .sidebarContainer {
+    height: 100%;
+    background-color: rgba(31, 41, 55, 0.8); /* Tailwind bg-gray-800 with opacity */
+    backdrop-filter: blur(10px);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #374151; /* Tailwind border-gray-700 */
+  }
+  
+  /* Sidebar menu button */
+  .menuButton {
+    padding: 8px;
+    border-radius: 50%;
+    max-width: fit-content;
+    transition: background-color 0.3s ease;
+  }
+  
+  .menuButton:hover {
+    background-color: #374151; /* Tailwind hover:bg-gray-700 */
+  }
+  
+  /* Navigation */
+  .nav {
+    margin-top: 32px;
+    flex-grow: 1;
+  }
+  
+  /* Navigation items */
+  .navItem {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 8px;
+  }
+  
+  .navItem:hover {
+    background-color: #374151; /* Tailwind hover:bg-gray-700 */
+  }
+  
+  /* Navigation text (hidden when sidebar is collapsed) */
+  .navText {
+    margin-left: 16px;
+    white-space: nowrap;
+  }
+  
