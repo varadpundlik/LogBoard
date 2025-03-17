@@ -6,7 +6,7 @@ const { rcaRouter } = require("./routes/rca");
 const { automationRouter } = require("./routes/automation");
 
 const app = express();
-const port = 5000;
+const port = 6000;
 
 app.get("/", (req, res) => res.send("Hello World!"));
 app.use("/logs", logsRouter);

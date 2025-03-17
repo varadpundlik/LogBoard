@@ -30,7 +30,7 @@ if "GOOGLE_API_KEY" not in os.environ:
 app = FastAPI()
 
 # Connect to Elasticsearch
-es = Elasticsearch("https://da6d-103-150-139-92.ngrok-free.app/")
+es = Elasticsearch("https://579b-103-150-139-92.ngrok-free.app/")
 
 # Store latest processed results
 latest_results = {
@@ -204,7 +204,7 @@ def process_logs():
 
     while True:
         # Fetch new logs
-        logs_docs = fetch_new_logs(".ds-filebeat-8.17.0-2025.01.09-000001")
+        logs_docs = fetch_new_logs(".ds-filebeat-8.17.0-2025.02.09-000002")
 
         if not logs_docs:
             print("No new logs found.")
@@ -227,7 +227,7 @@ def process_logs():
 
         print("Updated Results:", latest_results)
 
-        time.sleep(120)  # Fetch logs every 2 minutes to fit in Gemini free tier
+        time.sleep(3600)  # Fetch logs every 2 minutes to fit in Gemini free tier
 
 # API Endpoints
 @app.get("/summary")
