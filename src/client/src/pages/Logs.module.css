@@ -1,0 +1,138 @@
+/* Table Container */
+.tableContainer {
+    overflow-x: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Logs Table */
+  .logsTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #325368;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  /* Table Header */
+  .logsTable thead {
+    background-color: #0f1225;
+    color: white;
+  }
+  
+  .logsTable th {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  /* Table Rows */
+  .logsTable tbody tr {
+    transition: 0.2s ease-in-out;
+  }
+  
+  .logsTable tbody tr:hover {
+    background-color: #e9ecef;
+  }
+  
+  /* Table Data Cells */
+  .logsTable td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Date Filter */
+  .date-filter {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .date-filter input[type="datetime-local"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .date-filter button {
+    padding: 8px 20px;
+    background-color: #bcbcd2;
+    color: #282525;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+  }
+  
+  .date-filter button:hover {
+    background-color: #a6a6d6;
+    transform: scale(1.01);
+  }
+  
+  /* Table Header */
+  .table__header {
+    height: 80px;
+  }
+  
+  /* Modal Styling */
+  .modal-content1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .modal-content1 h1 {
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  }
+  
+  .modal-content1 button {
+    background-color: #a6a6d6;
+    width: 40%;
+    height: 30px;
+    border-radius: 10px;
+    transition: 0.2s ease-in-out;
+  }
+  
+  .modal-content1 button:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  
+  .paginationButton {
+    padding: 8px 12px;
+    background-color: #4a4e69;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+  }
+  
+  .paginationButton:hover {
+    background-color: #3c3f58;
+    transform: scale(1.05);
+  }
+  
+  .paginationButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pageInfo {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  

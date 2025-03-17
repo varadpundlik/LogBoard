@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+
 
 const { logsRouter } = require("./routes/logRoutes");
 const { metricsRouter } = require("./routes/metrics");
@@ -8,8 +10,7 @@ const cors = require("cors");
 const app = express();
 const port = 6000;
 
-app.use(cors({ origin: "http://localhost:5173" }));
-
+app.use(cors());
 app.get("/", (req, res) => res.send("Hello World!"));
 app.use("/logs", logsRouter);
 app.use("/metrics", metricsRouter);

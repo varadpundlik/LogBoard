@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const URL = "http://localhost:5001/";
+const URL = "http://desired-stallion-accurately.ngrok-free.app/";
 
 const ask = async (path) => {
   try {
