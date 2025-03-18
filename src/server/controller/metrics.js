@@ -48,6 +48,24 @@ const fetchMetrics = async (req, res) => {
 
       if (doc.system?.cpu?.total?.pct !== undefined) {
         cpu.push({ timestamp, value: doc.system.cpu.total.pct * 100 });
+
+        if(doc.system.cpu.total.pct * 100 > 80){
+          const mockReq = {
+            body: {
+              type: "cpu",
+              email: "parthtagalpallewar123@gmail.com",
+              name: "System Admin",
+              cpuUsage: 85 // High CPU Usage %
+            }
+          };
+          const mockRes = {
+            status: (code) => ({
+              json: (data) => console.log(`Response [${code}]:`, data),
+            }),
+          };
+    
+          sendMail(mockReq, mockRes); 
+        }
       }
       if (doc.system?.memory?.used?.pct !== undefined) {
         memory.push({ timestamp, value: doc.system.memory.used.pct * 100 });
