@@ -35,7 +35,7 @@ import LogsPage from "./pages/Logs";
 import LogsSummary from "./pages/LogsSummary";
 import RootCauseAnalysis from "./pages/RootCause";
 import AutomationStatus from "./pages/Automation";
-import Login from "./pages/Login";
+import Login from "./pages/login";
 import styles from "./App.module.css"; // Import CSS module
 
 function App() {
