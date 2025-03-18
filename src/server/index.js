@@ -1,11 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 
-
 const { logsRouter } = require("./routes/logRoutes");
 const { metricsRouter } = require("./routes/metrics");
 const { rcaRouter } = require("./routes/rca");
 const { automationRouter } = require("./routes/automation");
+
 const app = express();
 const port = 6000;
 
