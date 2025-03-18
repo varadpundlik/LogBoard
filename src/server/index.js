@@ -6,7 +6,7 @@ const { logsRouter } = require("./routes/logRoutes");
 const { metricsRouter } = require("./routes/metrics");
 const { rcaRouter } = require("./routes/rca");
 const { automationRouter } = require("./routes/automation");
-const cors = require("cors");
+
 const app = express();
 const port = 6000;
 
