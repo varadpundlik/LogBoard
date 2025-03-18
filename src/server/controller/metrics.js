@@ -16,6 +16,10 @@ const client = new Client({
 const fetchMetrics = async (req, res) => {
   const { index } = req.params;
   try {
+    const cpu = [];
+    const memory = [];
+    const diskio = [];
+    const network = [];
     const scrollSize = 1000; // Number of documents to fetch per scroll
     let documents = [];
     let response = await client.search({
@@ -30,19 +34,34 @@ const fetchMetrics = async (req, res) => {
     });
 
     while (response.hits.hits.length > 0) {
-      documents = documents.concat(
-        response.hits.hits.map((hit) => hit._source)
-      );
+      documents = documents.concat(response.hits.hits.map((hit) => hit._source));
       const { _scroll_id } = response;
-
       response = await client.scroll({
         scroll_id: _scroll_id,
         scroll: "1m",
       });
     }
 
-    console.log(`Fetched total logs: ${documents.length}`);
-    res.json(documents);
+    // Process documents into the required arrays
+    documents.forEach((doc) => {
+      const timestamp = doc['@timestamp'];
+
+      if (doc.system?.cpu?.total?.pct !== undefined) {
+        cpu.push({ timestamp, value: doc.system.cpu.total.pct * 100 });
+      }
+      if (doc.system?.memory?.used?.pct !== undefined) {
+        memory.push({ timestamp, value: doc.system.memory.used.pct * 100 });
+      }
+      if (doc.system?.diskio?.write?.bytes !== undefined) {
+        diskio.push({ timestamp, value: doc.system.diskio.write.bytes });
+      }
+      if (doc.system?.network?.in?.bytes !== undefined) {
+        network.push({ timestamp, value: doc.system.network.in.bytes });
+      }
+    });
+
+    console.log(`Fetched total metrics: ${documents.length}`);
+    res.json({ cpu, memory, diskio, network });
   } catch (error) {
     console.error("Error fetching logs:", error);
     res.status(500).json({ error: "An error occurred while fetching logs." });
