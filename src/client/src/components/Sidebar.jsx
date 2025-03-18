@@ -8,10 +8,10 @@ const SIDEBAR_ITEMS = [
 	{ name: "Overview", icon: BarChart2, color: "#6366f1", href: "/" },
 	{ name: "Logs Explorer", icon: ShoppingBag, color: "#8B5CF6", href: "/logs" },
 	{ name: "System Metrics", icon: Users, color: "#EC4899", href: "/users" },
+	{ name: "Logs summarization", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },
 	{ name: "Alerts", icon: DollarSign, color: "#10B981", href: "/sales" },
 	{ name: "Root Cause Analysis", icon: ShoppingCart, color: "#F59E0B", href: "/orders" },
-	{ name: "Analytics", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },
-	{ name: "Settings", icon: Settings, color: "#6EE7B7", href: "/settings" },
+	{ name: "Automation", icon: Settings, color: "#6EE7B7", href: "/settings" },
 ];
 
 const Sidebar = () => {

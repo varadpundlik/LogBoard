@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 
-
 const { logsRouter } = require("./routes/logRoutes");
 const { metricsRouter } = require("./routes/metrics");
 const { rcaRouter } = require("./routes/rca");
