@@ -1,31 +1,73 @@
+// import { Route, Routes } from "react-router-dom";
+// import Sidebar from "./components/Sidebar";
+// import Overview from "./pages/Overview";
+// import LogsPage from "./pages/Logs";
+// import Login from "./pages/Login"
+// import styles from "./App.module.css"; 
+
+// function App() {
+// 	return (
+// 		<div className={styles.appContainer}>
+		
+// 			<div className={styles.backgroundOverlay}>
+// 				<div className={styles.gradientOverlay} />
+// 				<div className={styles.blurOverlay} />
+// 			</div>
+
+// 			<Sidebar />
+
+// 			<Routes>
+// 				<Route path='/' element={<Overview />} />
+// 				<Route path='/logs' element={<LogsPage />} />
+// 				<Route path='/login' element={<Login />} />
+		
+// 			</Routes>
+// 		</div>
+// 	);
+// }
+
+// export default App;
+
 import { Route, Routes } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
-import OverviewPage from "./pages/OverviewPage";
+import DashboardLayout from "./components/DashboardLayout"; // Import the DashboardLayout
+import Overview from "./pages/Overview";
 import LogsPage from "./pages/Logs";
+import Login from "./pages/Login";
 import styles from "./App.module.css"; // Import CSS module
 
 function App() {
-	return (
-		<div className={styles.appContainer}>
-			{/* Background Overlay */}
-			<div className={styles.backgroundOverlay}>
-				<div className={styles.gradientOverlay} />
-				<div className={styles.blurOverlay} />
-			</div>
+  return (
+    <div className={styles.appContainer}>
+      {/* Background Overlay */}
+      <div className={styles.backgroundOverlay}>
+        <div className={styles.gradientOverlay} />
+        <div className={styles.blurOverlay} />
+      </div>
 
-			<Sidebar />
+      <Routes>
+        {/* Routes with Dashboard Layout */}
+        <Route
+          path="/"
+          element={
+            <DashboardLayout>
+              <Overview />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/logs"
+          element={
+            <DashboardLayout>
+              <LogsPage />
+            </DashboardLayout>
+          }
+        />
 
-			<Routes>
-				<Route path='/' element={<OverviewPage />} />
-				<Route path='/logs' element={<LogsPage />} />
-					{/* <Route path='/users' element={<UsersPage />} />
-				<Route path='/sales' element={<SalesPage />} />
-				<Route path='/orders' element={<OrdersPage />} />
-				<Route path='/analytics' element={<AnalyticsPage />} />
-				<Route path='/settings' element={<SettingsPage />} /> */}
-			</Routes>
-		</div>
-	);
+        {/* Route without Dashboard Layout */}
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
