@@ -32,6 +32,7 @@ import { Route, Routes } from "react-router-dom";
 import DashboardLayout from "./components/DashboardLayout"; // Import the DashboardLayout
 import Overview from "./pages/Overview";
 import LogsPage from "./pages/Logs";
+import LogsSummary from "./pages/LogsSummary";
 import Login from "./pages/Login";
 import styles from "./App.module.css"; // Import CSS module
 
@@ -59,6 +60,14 @@ function App() {
           element={
             <DashboardLayout>
               <LogsPage />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/logs-summary"
+          element={
+            <DashboardLayout>
+              <LogsSummary />
             </DashboardLayout>
           }
         />
