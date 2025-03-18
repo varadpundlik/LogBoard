@@ -33,6 +33,8 @@ import DashboardLayout from "./components/DashboardLayout"; // Import the Dashbo
 import Overview from "./pages/Overview";
 import LogsPage from "./pages/Logs";
 import LogsSummary from "./pages/LogsSummary";
+import RootCauseAnalysis from "./pages/RootCause";
+import AutomationStatus from "./pages/Automation";
 import Login from "./pages/Login";
 import styles from "./App.module.css"; // Import CSS module
 
@@ -68,6 +70,23 @@ function App() {
           element={
             <DashboardLayout>
               <LogsSummary />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/root-cause"
+          element={
+            <DashboardLayout>
+              <RootCauseAnalysis />
+            </DashboardLayout>
+          }
+        />
+
+        <Route
+          path="/automation"
+          element={
+            <DashboardLayout>
+              <AutomationStatus />
             </DashboardLayout>
           }
         />
