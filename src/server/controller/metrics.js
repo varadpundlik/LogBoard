@@ -64,7 +64,7 @@ const fetchMetrics = async (req, res) => {
 
     // CPU usage threshold check and email trigger
     cpuRecords.forEach((doc) => {
-      if (doc.system?.cpu?.total?.pct !== undefined && doc.system.cpu.total.pct * 100 > 80) {
+      if (doc.system?.cpu?.total?.pct !== undefined && doc.system.cpu.total.pct * 100 > 200) {
         const mockReq = {
           body: {
             type: "cpu",
