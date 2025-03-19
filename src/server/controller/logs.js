@@ -1,7 +1,7 @@
 const { Client } = require("@elastic/elasticsearch");
 const { ask } = require("../utils/llm");
 const config = require("../config/config");
-const { sendEmail } = require("./alert");
+const { sendMail } = require("./alert");
 
 // const client = new Client({
 //   node: config.elasticsearch_endpoint,
@@ -106,10 +106,11 @@ const checkAlert = async (req, res) => {
         }),
       };
 
-      sendMail(mockReq, mockRes); 
+      sendMail(mockReq, mockRes);
+      res.json({ message: "Alert check completed successfully.Mail sent for failure" }); 
     }
 
-    res.json(documents);
+    res.json({ message: "Alert check completed successfully.No failure" });
   } catch (error) {
     console.error("Error fetching logs:", error);
     res.status(500).json({ error: "An error occurred while fetching logs." });
@@ -162,4 +163,4 @@ const logsSummarization = async (req, res) => {
   }
 };
 
-module.exports = { fetchLogs, searchLogs, logsSummarization };
+module.exports = { fetchLogs, searchLogs, logsSummarization, checkAlert};
