@@ -84,3 +84,5 @@ exports.sendMail = (req, res) => {
     res.status(200).json({ message: 'Email sent successfully', response: info.response });
   });
 };
+
+module.exports = { sendMail };

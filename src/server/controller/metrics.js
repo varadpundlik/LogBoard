@@ -1,5 +1,6 @@
 const { Client } = require("@elastic/elasticsearch");
 const config = require("../config/config");
+const { sendMail } = require("./alert");
 
 const client = new Client({
   node: config.elasticsearch_endpoint,
