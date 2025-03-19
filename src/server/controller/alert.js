@@ -4,7 +4,8 @@ const Mailgen = require('mailgen');
 
 const sendMail = (req, res) => {
   const { type, email, name, _id, cpuUsage, errorMessage } = req.body;
-
+  console.log(process.env.MAIL_ID);
+  console.log(process.env.PASS);
   // Create a transporter object using SMTP transport
   const transporter = nodemailer.createTransport({
     service: 'gmail',

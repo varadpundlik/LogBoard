@@ -1,7 +1,9 @@
+require("dotenv").config({path: __dirname+"/config.env"});
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const config = require("./config/config");
 const { logsRouter } = require("./routes/logRoutes");
 const { metricsRouter } = require("./routes/metrics");
 const { rcaRouter } = require("./routes/rca");
@@ -14,7 +16,7 @@ const port = 6000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 mongoose
-    .connect("mongodb+srv://Varad:Varad@cluster0.36hlagn.mongodb.net/logboardDB")
+    .connect(config.db_url)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.log(err));
 
@@ -30,4 +32,5 @@ app.use("/project", projectRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
+  console.log(config);
 });
