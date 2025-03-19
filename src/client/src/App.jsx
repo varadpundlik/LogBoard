@@ -36,6 +36,7 @@ import LogsSummary from "./pages/LogsSummary";
 import RootCauseAnalysis from "./pages/RootCause";
 import AutomationStatus from "./pages/Automation";
 import Metrics from "./pages/Metrics";
+import AlertStatus from "./pages/Alert";
 import Login from "./pages/login";
 import styles from "./App.module.css"; // Import CSS module
 
@@ -97,6 +98,15 @@ function App() {
           element={
             <DashboardLayout>
               <Metrics />
+            </DashboardLayout>
+          }
+        />
+
+        <Route
+          path="/alerts"
+          element={
+            <DashboardLayout>
+              <AlertStatus />
             </DashboardLayout>
           }
         />

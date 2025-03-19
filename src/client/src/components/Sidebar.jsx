@@ -9,7 +9,7 @@ const SIDEBAR_ITEMS = [
   { name: "Logs Explorer", icon: ShoppingBag, color: "#7f818d", href: "/logs" },
   { name: "System Metrics", icon: Users, color: "#7f818d", href: "/metrics" },
   { name: "Logs summarization", icon: TrendingUp, color: "#7f818d", href: "/logs-summary" },
-  { name: "Alerts", icon: DollarSign, color: "#7f818d", href: "/sales" },
+  { name: "Alerts", icon: DollarSign, color: "#7f818d", href: "/alerts" },
   { name: "Root Cause Analysis", icon: ShoppingCart, color: "#7f818d", href: "/root-cause" },
   { name: "Automation", icon: Settings, color: "#7f818d", href: "/automation" },
 ];
