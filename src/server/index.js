@@ -7,6 +7,7 @@ const { metricsRouter } = require("./routes/metrics");
 const { rcaRouter } = require("./routes/rca");
 const { automationRouter } = require("./routes/automation");
 const { userRouter } = require("./routes/user");
+const { projectRouter } = require("./routes/project");
 
 const app = express();
 const port = 6000;
@@ -24,5 +25,6 @@ app.use("/metrics", metricsRouter);
 app.use("/rca", rcaRouter);
 app.use("/automation", automationRouter);
 app.use("/user", userRouter);
+app.use("/project", projectRouter);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
