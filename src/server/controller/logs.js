@@ -83,7 +83,7 @@ const checkAlert = async (req, res) => {
     console.log(`Fetched total logs: ${documents.length}`);
 
     // Check if any log contains "Error"
-    const errorMessages = documents.filter((message) => message.includes("Error"));
+    const errorLogs = documents.filter((message) => message.includes("Error"));
 
     // If error logs are found, send an email
     if (errorLogs.length > 0) {
