@@ -10,6 +10,7 @@ const RootCauseAnalysis = () => {
     const fetchRCA = async () => {
       try {
         const response = await fetch("https://logboard-1.onrender.com/rca");
+        // const response = await fetch("http://localhost:5000/rca");
         if (!response.ok) throw new Error("Failed to fetch RCA data");
         const data = await response.json();
         setRootCause(data);

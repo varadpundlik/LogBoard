@@ -117,8 +117,18 @@ const checkAlert = async (req, res) => {
 };
 
 const searchLogs = async (req, res) => {
+  // Debugging: Log the request body and headers
+  console.log("Request Body:", req.body);
+  console.log("Request Headers:", req.headers);
+
   const { index } = req.params;
   const { query } = req.body;
+
+  // Check if query is provided
+  if (!query) {
+    return res.status(400).json({ error: "Query parameter is required." });
+  }
+
   try {
     const response = await client.search({
       index,

@@ -1,138 +1,108 @@
-/* Table Container */
+/* Remove scrollbar for the entire page */
+html, body {
+  overflow: hidden;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 1rem; 
+  max-width: 1200px;
+  /* margin: 0 auto; */
+  height: 85vh;
+  width: 75vw; /* Ensure the container takes full height */
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  
+  font-size: 1.5rem; /* Reduced font size */
+  font-weight: bold;
+  color: #2d3748;
+  text-align: center;
+  margin-bottom: 1rem; 
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.searchInput {
+  width: 97%;
+  padding: 0.75rem;
+  margin-bottom: 1rem; /* Reduced margin */
+  border: 1px solid hsl(214, 32%, 91%);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+  border-color: #4a90e2;
+}
+
+.loading,
+.error,
+.noLogs {
+  text-align: center;
+  color: #718096;
+}
+
+.error {
+  color: #e53e3e;
+}
+
 .tableContainer {
-    overflow-x: auto;
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Logs Table */
-  .logsTable {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #325368;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  /* Table Header */
-  .logsTable thead {
-    background-color: #0f1225;
-    color: white;
-  }
-  
-  .logsTable th {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 2px solid #ddd;
-  }
-  
-  /* Table Rows */
-  .logsTable tbody tr {
-    transition: 0.2s ease-in-out;
-  }
-  
-  .logsTable tbody tr:hover {
-    background-color: #e9ecef;
-  }
-  
-  /* Table Data Cells */
-  .logsTable td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  /* Date Filter */
-  .date-filter {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .date-filter input[type="datetime-local"] {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .date-filter button {
-    padding: 8px 20px;
-    background-color: #bcbcd2;
-    color: #282525;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
-  }
-  
-  .date-filter button:hover {
-    background-color: #a6a6d6;
-    transform: scale(1.01);
-  }
-  
-  /* Table Header */
-  .table__header {
-    height: 80px;
-  }
-  
-  /* Modal Styling */
-  .modal-content1 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .modal-content1 h1 {
-    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  }
-  
-  .modal-content1 button {
-    background-color: #a6a6d6;
-    width: 40%;
-    height: 30px;
-    border-radius: 10px;
-    transition: 0.2s ease-in-out;
-  }
-  
-  .modal-content1 button:hover {
-    transform: scale(1.05);
-  }
-  
-  /* Pagination */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    gap: 10px;
-  }
-  
-  .paginationButton {
-    padding: 8px 12px;
-    background-color: #4a4e69;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
-  }
-  
-  .paginationButton:hover {
-    background-color: #3c3f58;
-    transform: scale(1.05);
-  }
-  
-  .paginationButton:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .pageInfo {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  flex: 1; /* Allow the table container to take remaining space */
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollableTable {
+  flex: 1; /* Allow the table to take remaining space */
+  overflow-y: auto; /* Add scrollbar only for the table */
+  display: block;
+}
+
+.logsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+.logsTable th {
+  position: sticky;
+  top: 0;
+  background-color: rgb(82, 106, 134);
+  color: white;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+}
+
+.logsTable td {
+  padding: 15px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #4a5568;
+}
+
+.logsTable tbody tr:nth-child(even) {
+  background-color: #f7fafc;
+}
+
+.logsTable tbody tr:hover {
+  background-color: #ebf8ff;
+  cursor: pointer;
+}
+
+.noLogs {
+  padding: 1rem;
+  text-align: center;
+  color: #a0aec0;
+}

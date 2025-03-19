@@ -10,6 +10,7 @@ const LogsTable = () => {
     const fetchLogs = async () => {
       try {
         const response = await fetch("https://logboard-1.onrender.com/logs/summarize");
+        // const response = await fetch("http://localhost:5000/logs/summarize");
         if (!response.ok) throw new Error("Failed to fetch logs");
         const data = await response.json();
         setOperations(data.operations || []);
@@ -27,7 +28,7 @@ const LogsTable = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">System Logs</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-2  text-center">System Logs</h2>
       {loading && <p className="text-center text-gray-500">Loading logs...</p>}
       {error && <p className="text-center text-red-500">Error: {error}</p>}
 
