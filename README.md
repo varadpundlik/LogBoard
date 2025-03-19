@@ -71,10 +71,10 @@ This project is licensed under the [MIT License](LICENSE).
 
 Contributors to this project:
 
-[Varad Pundlik](https:github.com/varadpundlik)
+[Varad Pundlik](https://github.com/varadpundlik)
 
 [Divyank Sagvekar](https://github.com/divyank007)
 
 [Parth Tagalpallewar](https://github.com/ParthTagalpallewar)
 
-[Anirudha Udgirkar](https://github.com/Anirudha0721)
+[Anirudha Udgirkar](https://github.com/Anirudha1821)
