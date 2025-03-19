@@ -10,6 +10,7 @@ const app = express();
 const port = 6000;
 
 app.use(cors());
+app.use(express.json());
 app.get("/", (req, res) => res.send("Hello World!"));
 app.use("/logs", logsRouter);
 app.use("/metrics", metricsRouter);
