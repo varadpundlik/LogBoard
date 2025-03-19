@@ -72,4 +72,26 @@ const getUserProjects = asyncHandler(async (req, res) => {
   
     res.status(200).json(projects);
   })
-module.exports = { addProject, getProjects,getUserProjects };
+
+
+// Update filebeat_index and metricbeat_index by project name
+const updateProjectIndices = asyncHandler(async (req, res) => {
+    const { name, filebeat_index, metricbeat_index } = req.body;
+  
+    if (!name || !filebeat_index || !metricbeat_index) {
+      return res.status(400).json({ message: "Project name, filebeat_index, and metricbeat_index are required!" });
+    }
+  
+    const project = await Project.findOneAndUpdate(
+      { name },
+      { filebeat_index, metricbeat_index },
+      { new: true }
+    );
+  
+    if (!project) {
+      return res.status(404).json({ message: "Project not found!" });
+    }
+  
+    res.status(200).json({ message: "Project indices updated successfully", project });
+  });
+module.exports = { addProject, getProjects,getUserProjects,updateProjectIndices };
