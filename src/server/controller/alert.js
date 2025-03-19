@@ -2,7 +2,7 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const Mailgen = require('mailgen');
 
-exports.sendMail = (req, res) => {
+const sendMail = (req, res) => {
   const { type, email, name, _id, cpuUsage, errorMessage } = req.body;
 
   // Create a transporter object using SMTP transport
