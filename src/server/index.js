@@ -19,6 +19,7 @@ mongoose
     .catch(err => console.log(err));
 
 app.use(cors());
+app.use(express.json());
 app.get("/", (req, res) => res.send("Hello World!"));
 app.use("/logs", logsRouter);
 app.use("/metrics", metricsRouter);
@@ -27,4 +28,6 @@ app.use("/automation", automationRouter);
 app.use("/user", userRouter);
 app.use("/project", projectRouter);
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}!`);
+});

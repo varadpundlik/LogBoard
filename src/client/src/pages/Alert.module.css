@@ -1,0 +1,109 @@
+/* Remove scrollbar for the entire page */
+html, body {
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fc; /* Soft background color for contrast */
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    padding: 1rem; 
+    max-width: 1200px;
+    height: 85vh;
+    width: 75vw;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1e293b; /* Darker shade for better readability */
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .searchInput {
+    width: 97%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  .searchInput:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 4px rgba(59, 130, 246, 0.5);
+  }
+  
+  .loading, .error, .noLogs {
+    text-align: center;
+    font-size: 1rem;
+  }
+  
+  .error {
+    color: #dc2626;
+    font-weight: bold;
+  }
+  
+  .noLogs {
+    color: #64748b;
+  }
+  
+  .tableContainer {
+    border: 1px solid #cbd5e1;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .scrollableTable {
+    flex: 1;
+    overflow-y: auto;
+    display: block;
+  }
+  
+  .logsTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+  
+  .logsTable th {
+    position: sticky;
+    top: 0;
+    background-color: #334155; /* Deep blue for better contrast */
+    color: white;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: left;
+  }
+  
+  .logsTable td {
+    padding: 15px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #1e293b;
+  }
+  
+  .logsTable tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+  
+  .logsTable tbody tr:hover {
+    background-color: #e0f2fe;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  

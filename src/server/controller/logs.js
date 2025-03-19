@@ -1,6 +1,7 @@
 const { Client } = require("@elastic/elasticsearch");
 const { ask } = require("../utils/llm");
 const config = require("../config/config");
+const { sendMail } = require("./alert");
 
 // const client = new Client({
 //   node: config.elasticsearch_endpoint,
@@ -50,9 +51,85 @@ const fetchLogs = async (req, res) => {
   }
 };
 
+const checkAlert = async (req, res) => {
+  const { index } = req.params;
+  try {
+    const scrollSize = 1000; // Number of documents to fetch per scroll
+    let documents = [];
+    let response = await client.search({
+      index,
+      scroll: "1m", // Set the scroll timeout
+      size: scrollSize,
+      body: {
+        query: {
+          match_all: {},
+        },
+      },
+    });
+
+    while (response.hits.hits.length > 0) {
+      // Collect all logs
+      documents = documents.concat(response.hits.hits.map((hit) => hit._source.message));
+
+      const { _scroll_id } = response;
+
+      // Fetch the next batch of results
+      response = await client.scroll({
+        scroll_id: _scroll_id,
+        scroll: "1m",
+      });
+    }
+
+    console.log(`Fetched total logs: ${documents.length}`);
+
+    // Check if any log contains "Error"
+    const errorLogs = documents.filter((message) => message.includes("Error"));
+
+    // If error logs are found, send an email
+    if (errorLogs.length > 0) {
+
+      
+
+      const mockReq = {
+        body: {
+          type: "error",
+          email: "parthtagalpallewar123@gmail.com",
+          name: "Parth", 
+          _id: new Date().getTime().toString(), 
+          errorLogs: errorMessages 
+        }
+      };
+
+      const mockRes = {
+        status: (code) => ({
+          json: (data) => console.log(`Response [${code}]:`, data),
+        }),
+      };
+
+      sendMail(mockReq, mockRes);
+      res.json({ message: "Alert check completed successfully.Mail sent for failure" }); 
+    }
+
+    res.json({ message: "Alert check completed successfully.No failure" });
+  } catch (error) {
+    console.error("Error fetching logs:", error);
+    res.status(500).json({ error: "An error occurred while fetching logs." });
+  }
+};
+
 const searchLogs = async (req, res) => {
+  // Debugging: Log the request body and headers
+  console.log("Request Body:", req.body);
+  console.log("Request Headers:", req.headers);
+
   const { index } = req.params;
   const { query } = req.body;
+
+  // Check if query is provided
+  if (!query) {
+    return res.status(400).json({ error: "Query parameter is required." });
+  }
+
   try {
     const response = await client.search({
       index,
@@ -86,4 +163,4 @@ const logsSummarization = async (req, res) => {
   }
 };
 
-module.exports = { fetchLogs, searchLogs, logsSummarization };
+module.exports = { fetchLogs, searchLogs, logsSummarization, checkAlert};

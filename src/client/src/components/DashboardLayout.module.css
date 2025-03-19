@@ -1,0 +1,27 @@
+.dashboardContainer {
+  display: flex;
+  height: 100vh;
+}
+
+.mainContent {
+  flex: 1;
+  /* overflow: hidden; */
+  display: flex;
+  width:82vw;
+  flex-direction: column;
+  transition: margin-left 0.3s ease; /* Smooth transition */
+}
+
+.mainContent.sidebarOpen {
+  margin-left: 250px; /* Width of the open sidebar */
+}
+
+.mainContent.sidebarClosed {
+  margin-left: 80px; /* Width of the closed sidebar */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
