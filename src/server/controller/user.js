@@ -82,15 +82,13 @@ const currentUser = asyncHandler(async (req, res) => {
   }
 });
 
-// List doctors (if model contains the fields)
-const listDoctors = asyncHandler(async (req, res) => {
+const getUsers = asyncHandler(async (req, res) => {
   try {
-    // Make sure 'name', 'address', 'specialization' exist in your User model
-    const doctors = await User.find({}, "id username email"); // Removed non-existing fields
-    return res.status(200).json(doctors);
+    const users = await User.find({}, "id username email");
+    return res.status(200).json(users);
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-module.exports = { register, login, currentUser, listDoctors };
+module.exports = { register, login, currentUser, getUsers };
