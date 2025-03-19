@@ -60,26 +60,25 @@ const fetchMetrics = async (req, res) => {
       in_errors: doc.system.network.in?.errors || 0,
       out_errors: doc.system.network.out?.errors || 0,
     }));
-    
-      if (doc.system?.cpu?.total?.pct !== undefined) {
 
-        if(doc.system.cpu.total.pct * 100 > 80){
-          const mockReq = {
-            body: {
-              type: "cpu",
-              email: "parthtagalpallewar123@gmail.com",
-              name: "System Admin",
-              cpuUsage: 85 // High CPU Usage %
-            }
-          };
-          const mockRes = {
-            status: (code) => ({
-              json: (data) => console.log(`Response [${code}]:`, data),
-            }),
-          };
-    
-          sendMail(mockReq, mockRes); 
-        }
+    // CPU usage threshold check and email trigger
+    cpuRecords.forEach((doc) => {
+      if (doc.system?.cpu?.total?.pct !== undefined && doc.system.cpu.total.pct * 100 > 80) {
+        const mockReq = {
+          body: {
+            type: "cpu",
+            email: "parthtagalpallewar123@gmail.com",
+            name: "System Admin",
+            cpuUsage: doc.system.cpu.total.pct * 100, // High CPU Usage %
+          },
+        };
+        const mockRes = {
+          status: (code) => ({
+            json: (data) => console.log(`Response [${code}]:`, data),
+          }),
+        };
+
+        sendMail(mockReq, mockRes);
       }
     });
 
