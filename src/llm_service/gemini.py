@@ -85,9 +85,33 @@ summary_response_schemas = [
 
 # Define response schemas for root cause analysis
 root_cause_response_schemas = [
-    ResponseSchema(name="root_cause", description="Concise root cause description", type="string"),
-    ResponseSchema(name="evidence", description="List of relevant logs", type="list"),
-    ResponseSchema(name="recommendation", description="Suggested fix or action", type="string")
+    ResponseSchema(
+        name="root_causes",
+        description="List of root causes, each with status",
+        type="list",
+        items=[
+            {
+                "name": "root_cause",
+                "description": "Concise root cause description",
+                "type": "string"
+            },
+            {
+                "name": "evidence",
+                "description": "List of relevant logs",
+                "type": "list"
+            },
+            {
+                "name": "recommendation",
+                "description": "Suggested fix or action",
+                "type": "string"
+            },
+            {
+                "name": "status",
+                "description": "Root cause status (resolved or unresolved)",
+                "type": "string"
+            }
+        ]
+    )
 ]
 
 automation_response_schemas = [
@@ -107,14 +131,14 @@ automation_output_parser = StructuredOutputParser.from_response_schemas(automati
 prompt_template_summary = PromptTemplate(
     input_variables=["context"],  
     template="""
-    You are an expert at log analysis. Categorize logs into **distinct API operations** and generate a structured JSON output make sure that each log entry is classified into an operation without leaving anything unclassified.
+    You are an expert at log analysis. Categorize logs into **distinct API requests/operation** and generate a structured JSON output make sure that each log entry is classified into an request/operation without leaving anything unclassified.
     
     Return JSON in the format:
     {{
         "operations": [
             {{
                 "operation": "API operation name",
-                "summary": "Brief summary of the operation",
+                "summary": "Brief summary of the operation also mention about success and failure of operation",
                 "logs": ["log entry 1", "log entry 2"]
             }}
         ]
@@ -134,13 +158,18 @@ prompt_template_summary = PromptTemplate(
 prompt_template_root_cause = PromptTemplate(
     input_variables=["context"],  
     template="""
-    You are an expert in root cause analysis for API logs. Identify the root cause of errors and failures based on patterns in the logs.
+    You are an expert in root cause analysis for API logs. Identify all root causes of errors and failures based on patterns in the logs.
     
     Return ONLY JSON in the format:
     {{
-        "root_cause": "Concise root cause description",
-        "evidence": ["Relevant log 1", "Relevant log 2"],
-        "recommendation": "Suggested fix or action"
+        "root_causes": [
+            {{
+                "root_cause": "Concise root cause description",
+                "evidence": ["Relevant log 1", "Relevant log 2"],
+                "recommendation": "Suggested fix or action",
+                "status": "resolved or unresolved"
+            }}
+        ]
     }}
     
     Do NOT include any additional explanation.
@@ -163,9 +192,9 @@ automation_prompt_template = PromptTemplate(
 
     Use the following mapping to decide:
     {{
-        "Crash": "RestartServer",
-        "Memory Leak": "ScaleUpInstance",
-        "Database Connection Error": "RestartDatabase"
+        "Crash": "ApplicationRestart",
+        "Memory Leak": "ScaleUp",
+        "Database Connection Error": "DBRestart"
     }}
 
     Return **ONLY ONE** job name from the mapping if applicable. If no job is needed, return `"None"`.
