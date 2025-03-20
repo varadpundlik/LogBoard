@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Alert.module.css";k
+import styles from "./Alert.module.css";
 import { ClipLoader } from "react-spinners"; // For a loading spinner
 
 const AlertStatus = () => {
