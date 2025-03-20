@@ -1,0 +1,137 @@
+.addProjectContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 95vh; /* Full viewport height */
+    background: linear-gradient(90deg, hsla(240, 26%, 28%, 1) 0%, hsla(0, 0%, 0%, 1) 100%);
+    color: #c4c7db;
+    padding: 20px;
+    width: 95vw;
+  }
+  
+  .addProjectTitle {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #ff8700;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .errorMessage {
+    color: #ff4d4d; /* Red color for error messages */
+    font-size: 0.875rem;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .addProjectForm {
+    display: flex;
+    gap: 40px; /* Space between left and right columns */
+    width: 90%; /* Take up 90% of the page width */
+    max-width: 1200px; /* Maximum width for larger screens */
+    height: 70%; /* Take up 70% of the page height */
+    background: rgba(39, 43, 52, 0.9); /* Semi-transparent dark background */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .leftColumn,
+  .rightColumn {
+    flex: 1; /* Each column takes equal width */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between input groups */
+  }
+  
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .inputLabel {
+    font-size: 0.875rem;
+    color: #c4c7db;
+  }
+  
+  .inputField {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    background-color: #272b34;
+    color: #c4c7db;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .inputField:focus {
+    border-color: #ff8700;
+  }
+  
+  .emailInputContainer {
+    display: flex;
+    gap: 10px; /* Space between input and button */
+  }
+  
+  .addEmailButton {
+    padding: 12px;
+    background-color: #ff8700;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .addEmailButton:hover {
+    background-color: #e67600;
+  }
+  
+  .emailTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Space between tags */
+  }
+  
+  .emailTag {
+    display: flex;
+    align-items: center;
+    background-color: #374151;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #c4c7db;
+  }
+  
+  .removeEmailButton {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    margin-left: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #ff8700;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: auto; /* Push the button to the bottom */
+  }
+  
+  .submitButton:hover {
+    background-color: #e67600;
+  }

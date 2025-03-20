@@ -1,0 +1,135 @@
+/* Logs.module.css */
+
+/* Container for the entire page */
+.container {
+    padding: 1.5rem;
+    background: linear-gradient(90deg, hsla(240, 27%, 31%, 1) 0%, hsla(240, 9%, 9%, 1) 100%);
+    min-height: 100vh;
+    color: #ffffff; /* White text for contrast */
+    border-radius: 10px;
+}
+  
+  /* Title styling */
+  .title {
+    font-size: 2.5rem; /* 30px */
+    font-weight: 700;
+    color: #aab6c6; /* White text */
+    margin-bottom: 1.5rem; /* 24px */
+    text-align: center;
+  }
+  
+  /* Loading spinner container */
+  .loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 16rem; /* 256px */
+  }
+  
+  /* Error message styling */
+  .errorMessage {
+    background-color: rgba(220, 38, 38, 0.1); /* Light red background with transparency */
+    border: 1px solid #dc2626; /* Red border */
+    color: #dc2626; /* Red text */
+    padding: 1rem; /* 16px */
+    border-radius: 0.375rem; /* 6px */
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  /* Card styling for each operation block */
+  .operationCard {
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem; /* 8px */
+    padding: 1.5rem; /* 24px */
+    margin-bottom: 1.5rem; /* 24px */
+    backdrop-filter: blur(10px); /* Adds a blur effect for a frosted glass look */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  /* Hover effect to scale the card slightly */
+  .operationCard:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 12px -1px rgba(0, 0, 0, 0.3), 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Operation title inside the card */
+  .operationTitle {
+    font-size: 1.25rem; /* 20px */
+    font-weight: 600;
+    color: #ffffff; /* White text */
+    margin-bottom: 1rem; /* 16px */
+  }
+  
+  /* Operation summary text */
+  .operationSummary {
+    color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    margin-bottom: 1.5rem; /* 24px */
+  }
+  
+  /* Table styling */
+  .logsTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+    border-radius: 0.5rem; /* 8px */
+    overflow: hidden;
+  }
+  
+  /* Table header styling */
+  .logsTable thead {
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly darker semi-transparent white */
+  }
+  
+  .logsTable th {
+    padding: 0.75rem 1rem; /* 12px 16px */
+    text-align: left;
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    color: #ffffff; /* White text */
+  }
+  
+  /* Table row styling */
+  .logsTable tbody tr {
+    transition: background-color 0.2s ease;
+  }
+  
+  .logsTable tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Lighter semi-transparent white on hover */
+  }
+  
+  /* Table cell styling */
+  .logsTable td {
+    padding: 0.75rem 1rem; /* 12px 16px */
+    font-size: 0.875rem; /* 14px */
+    color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Light border */
+  }
+  
+  /* No logs message styling */
+  .noLogsMessage {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
+    font-size: 0.875rem; /* 14px */
+    padding: 1rem; /* 16px */
+  }
+  
+  /* Custom scrollbar for Webkit browsers (Chrome, Safari) */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }

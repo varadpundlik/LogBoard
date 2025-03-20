@@ -1,0 +1,120 @@
+.abc {
+    display: flex;
+    /* height: 100vh; */
+    background: linear-gradient(90deg, hsla(240, 26%, 28%, 1) 0%, hsla(0, 0%, 0%, 1) 100%);
+  }
+  
+  .imageSection {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(90deg, hsla(240, 26%, 28%, 1) 0%, hsla(0, 0%, 0%, 1) 100%);
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .loginImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+  }
+  
+  .loginBox {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background: rgba(39, 43, 52, 0.9);
+    max-width: 500px;
+    width: 100%;
+    border-radius: 50px;
+  }
+  
+  .loginTitle {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #ff8700;
+    margin-bottom: 8px;
+  }
+  
+  .loginSubtitle {
+    font-size: 1rem;
+    color: #7a879c;
+    margin-bottom: 24px;
+  }
+  
+  .loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+  
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .inputLabel {
+    font-size: 0.875rem;
+    color: #c4c7db;
+    text-align: left;
+  }
+  
+  .inputField {
+    padding: 12px;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    background-color: #272b34;
+    color: #c4c7db;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .inputField:focus {
+    border-color: #ff8700;
+  }
+  
+  .loginButton {
+    padding: 12px;
+    background-color: #ff8700;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .loginButton:hover {
+    background-color: #e67600;
+  }
+  
+  .signupText {
+    font-size: 0.875rem;
+    color: #7a879c;
+    margin-top: 16px;
+  }
+  
+  .signupText a {
+    color: #ff8700;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .signupText a:hover {
+    text-decoration: underline;
+  }
+  .errorMessage {
+    color: #ff4d4d; /* Red color for error messages */
+    font-size: 0.875rem;
+    margin-bottom: 16px;
+    text-align: center;
+  }

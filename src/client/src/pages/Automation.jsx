@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Logs.module.css";
+import styles from "./Automation.module.css";
+import { ClipLoader } from "react-spinners"; // For a loading spinner
 
 const AutomationStatus = () => {
   const [automationStatus, setAutomationStatus] = useState(null);
@@ -33,22 +34,31 @@ const AutomationStatus = () => {
   ];
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Automation Status</h2>
-      {loading && <p className="text-center text-gray-500">Loading automation status...</p>}
-      {error && <p className="text-center text-red-500">Error: {error}</p>}
-      
-      {!loading && !error && automationStatus && (
-        <div className={styles.tableContainer}>
-          <div className={styles.operationBlock}>
-            <h3 className="text-xl font-semibold text-black">Latest Status</h3>
-            <p className="text-black">{automationStatus.message}</p>
+    <div className={styles.container}>
+      <h2 className={styles.title}>AUTOMATION STATUS</h2>
+      {loading ? (
+        <div className={styles.loadingContainer}>
+          <ClipLoader color="#4F46E5" size={50} />
+        </div>
+      ) : error ? (
+        <div className={styles.errorMessage}>
+          <strong>Error:</strong> {error}
+        </div>
+      ) : automationStatus ? (
+        <div className={styles.contentContainer}>
+          {/* Latest Status Section */}
+          <div className={styles.operationCard}>
+            <h3 className={styles.operationTitle}>Latest Status</h3>
+            <p className={styles.operationSummary}>{automationStatus.message}</p>
           </div>
         </div>
+      ) : (
+        <p className={styles.noLogsMessage}>No automation status available</p>
       )}
-      
-      <div className={styles.operationBlock}>
-        <h3 className="text-xl font-semibold text-black">Previous Incidents</h3>
+     
+      {/* Previous Incidents Section */}
+      <div className={styles.operationCard}>
+        <h3 className={styles.operationTitle}>Previous Incidents</h3>
         <table className={styles.logsTable}>
           <thead>
             <tr>
@@ -68,7 +78,7 @@ const AutomationStatus = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="3" className="text-center text-gray-500">No previous incidents available</td>
+                <td colSpan="3" className={styles.noLogsMessage}>No previous incidents available</td>
               </tr>
             )}
           </tbody>

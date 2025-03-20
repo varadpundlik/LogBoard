@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Alert.module.css";
+import styles from "./Alert.module.css";k
+import { ClipLoader } from "react-spinners"; // For a loading spinner
 
 const AlertStatus = () => {
   const [alertMessage, setAlertMessage] = useState("Checking alerts...");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
 
   useEffect(() => {
     const fetchAlertStatus = async () => {
@@ -17,7 +21,10 @@ const AlertStatus = () => {
         const data = await response.json();
         setAlertMessage(data.message);
       } catch (err) {
+        setError(err.message);
         setAlertMessage("Error fetching alert status");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -33,11 +40,24 @@ const AlertStatus = () => {
   ];
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Alert Status</h2>
-      <p className="text-center text-gray-700 font-semibold">{alertMessage}</p>
-      <div className={styles.tableContainer}>
-        <h3 className="text-xl font-semibold mt-4">Previous Alerts</h3>
+    <div className={styles.container}>
+      <h2 className={styles.title}>ALERT STATUS</h2>
+
+      {loading ? (
+        <div className={styles.loadingContainer}>
+          <ClipLoader color="#4F46E5" size={50} />
+        </div>
+      ) : error ? (
+        <div className={styles.errorMessage}>
+          <strong>Error:</strong> {error}
+        </div>
+      ) : (
+        <p className={styles.alertMessage}>{alertMessage}</p>
+      )}
+
+      {/* Previous Alerts Section */}
+      <div className={styles.operationCard}>
+        <h3 className={styles.operationTitle}>Previous Alerts</h3>
         <table className={styles.logsTable}>
           <thead>
             <tr>
@@ -47,13 +67,20 @@ const AlertStatus = () => {
             </tr>
           </thead>
           <tbody>
-            {previousAlerts.map((alert, index) => (
-              <tr key={index}>
-                <td>{alert.timestamp}</td>
-                <td>{alert.status}</td>
-                <td>{alert.action}</td>
+
+            {previousAlerts.length > 0 ? (
+              previousAlerts.map((alert, index) => (
+                <tr key={index}>
+                  <td>{alert.timestamp}</td>
+                  <td>{alert.status}</td>
+                  <td>{alert.action}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3" className={styles.noLogsMessage}>No previous alerts available</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

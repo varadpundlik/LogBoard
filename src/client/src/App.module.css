@@ -1,5 +1,7 @@
 
-
+body{
+  background-color: black;
+}
 
  .appContainer {
   position: relative;
