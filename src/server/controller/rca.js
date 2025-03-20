@@ -2,7 +2,8 @@ const { ask } = require("../utils/llm");
 
 const fetchRCA = async (req, res) => {
   try {
-    const response = await ask(`root_cause`);
+    const index = req.params.index;
+    const response = await ask(`root_cause`,index);
     res.json(response);
   } catch (error) {
     console.error("Error fetching RCA:", error);

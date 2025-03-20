@@ -7,7 +7,7 @@ const {
   checkAlert,
 } = require("../controller/logs");
 
-logsRouter.get("/summarize", logsSummarization);
+logsRouter.get("/summarize/:index", logsSummarization);
 logsRouter.get("/:index", fetchLogs);
 logsRouter.post("/:index/search", searchLogs);
 logsRouter.post("/:index/alert", checkAlert);

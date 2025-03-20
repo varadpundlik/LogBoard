@@ -7,15 +7,11 @@ const JENKINS_BASE_URL = 'http://localhost:8800/job/';
 const JENKINS_API_TOKEN = process.env.JENKINS_API_TOKEN;
 const JENKINS_AUTH = { username: 'varadpundlik', password: JENKINS_API_TOKEN };
 
-const ERROR_TO_JOB_MAPPING = {
-    'Crash': 'RestartServer',
-    'Memory Leak': 'ScaleUpInstance',
-    'Database Connection Error': 'RestartDatabase',
-};
 
 async function checkLogs(req,res) {
     try{
-        const job=await ask('automation');
+        const index=req.params.index;
+        const job=await ask('automation',index);
         console.log(job);
         if(job.job=="None"){
             res.json({message:"No error found"});

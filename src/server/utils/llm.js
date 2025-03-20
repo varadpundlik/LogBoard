@@ -2,9 +2,9 @@ const axios = require("axios");
 
 const URL = "http://desired-stallion-accurately.ngrok-free.app/";
 
-const ask = async (path) => {
+const ask = async (path,index) => {
   try {
-    const response = await axios.get(URL + path);
+    const response = await axios.get(URL + path+"/"+index);
     if (response.status !== 200) {
       return [{ error: "An error occurred while fetching" }];
     }
