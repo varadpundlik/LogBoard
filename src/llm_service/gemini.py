@@ -12,6 +12,7 @@ import time
 import json
 import getpass
 import os
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -42,7 +43,7 @@ latest_results = {
 }
 
 # Track last processed log timestamp
-last_processed_timestamp = None
+last_processed_timestamps ={}
 
 # Load embedding model
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
@@ -183,66 +184,84 @@ automation_prompt_template = PromptTemplate(
 )
 
 
-# Function to fetch new logs since last processed timestamp
 def fetch_new_logs(index_name):
-    global last_processed_timestamp
+    global last_processed_timestamps
 
-    query = {"size": 1000, "query": {"range": {"@timestamp": {"gt": last_processed_timestamp}}}} if last_processed_timestamp else {"size": 1000, "query": {"match_all": {}}}
+    query = {"size": 1000, "query": {"range": {"@timestamp": {"gt": last_processed_timestamps.get(index_name, "now-1d")}}}} \
+        if index_name in last_processed_timestamps else {"size": 1000, "query": {"match_all": {}}}
+
     response = es.search(index=index_name, body=query)
 
     logs = []
     for hit in response["hits"]["hits"]:
         logs.append(Document(page_content=hit["_source"]["message"], metadata={"timestamp": hit["_source"]["@timestamp"]}))
-    
+
     # Update last processed timestamp
     if logs:
-        last_processed_timestamp = logs[-1].metadata["timestamp"]
+        last_processed_timestamps[index_name] = logs[-1].metadata["timestamp"]
 
     return logs
 
-# Background process function
-def process_logs():
+# Background process function per index
+def process_logs(index_name):
     global latest_results
 
     while True:
-        # Fetch new logs
-        logs_docs = fetch_new_logs(".ds-filebeat-8.17.0-2025.02.09-000002")
+        logs_docs = fetch_new_logs(index_name)
 
         if not logs_docs:
-            print("No new logs found.")
-            time.sleep(120)  # Wait 2 minutes before checking again
+            print(f"No new logs for {index_name}.")
+            time.sleep(180)  # Wait 3 minutes before checking again
             continue
 
         # Create FAISS retriever
         vectorstore = FAISS.from_documents(logs_docs, embedding=embedding_model)
-        retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": len(logs_docs)})  
+        retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": len(logs_docs)})
 
         # Create Retrieval Chains
         qa_chain_summary = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_summary)
         qa_chain_root_cause = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=prompt_template_root_cause)
         qa_chain_automation = RetrievalQA.from_llm(llm=llm_engine, retriever=retriever, prompt=automation_prompt_template)
 
-        # Run all operations and update results
-        latest_results["summary"] = summary_output_parser.parse(qa_chain_summary.invoke({"query": "Summarize logs"})["result"])
-        latest_results["root_cause"] = root_cause_output_parser.parse(qa_chain_root_cause.invoke({"query": "Find root cause"})["result"])
-        latest_results["automation"] = automation_output_parser.parse(qa_chain_automation.invoke({"query": "Determine automation job"})["result"])
+        # Run all operations and update results per index
+        latest_results[index_name] = {
+            "summary": summary_output_parser.parse(qa_chain_summary.invoke({"query": "Summarize logs"})["result"]),
+            "root_cause": root_cause_output_parser.parse(qa_chain_root_cause.invoke({"query": "Find root cause"})["result"]),
+            "automation": automation_output_parser.parse(qa_chain_automation.invoke({"query": "Determine automation job"})["result"]),
+        }
 
-        print("Updated Results:", latest_results)
+        print(f"Updated Results for {index_name}:", latest_results[index_name])
 
-        time.sleep(3600)  # Fetch logs every 2 minutes to fit in Gemini free tier
+        time.sleep(180)  # Fetch logs every 3 minutes to stay within Gemini free tier
+
+# Function to fetch indices from API and start threads
+def initialize_log_processing():
+    try:
+        response = requests.get("https://logboard-1.onrender.com/project/getProject")
+        if response.status_code == 200:
+            projects = response.json()
+            for project in projects:
+                index_name = project.get("filebeat_index")
+                if index_name:
+                    if index_name not in latest_results:
+                        latest_results[index_name] = {"summary": None, "root_cause": None, "automation": None}
+                        threading.Thread(target=process_logs, args=(index_name,), daemon=True).start()
+                        print(f"Started processing for {index_name}")
+    except Exception as e:
+        print(f"Failed to fetch indices: {e}")
+
+# Start log processing
+initialize_log_processing()
 
 # API Endpoints
-@app.get("/summary")
-def get_summary():
-    return latest_results["summary"]
+@app.get("/summary/{index_name}")
+def get_summary(index_name: str):
+    return latest_results.get(index_name, {"error": "Index not found"})["summary"]
 
-@app.get("/root_cause")
-def get_root_cause():
-    return latest_results["root_cause"]
+@app.get("/root_cause/{index_name}")
+def get_root_cause(index_name: str):
+    return latest_results.get(index_name, {"error": "Index not found"})["root_cause"]
 
-@app.get("/automation")
-def get_automation():
-    return latest_results["automation"]
-
-# Start Background Thread
-threading.Thread(target=process_logs, daemon=True).start()
+@app.get("/automation/{index_name}")
+def get_automation(index_name: str):
+    return latest_results.get(index_name, {"error": "Index not found"})["automation"]
