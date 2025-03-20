@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Alert.module.css";
+import styles from "./Alert.module.css";k
 import { ClipLoader } from "react-spinners"; // For a loading spinner
 
 const AlertStatus = () => {
   const [alertMessage, setAlertMessage] = useState("Checking alerts...");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     const fetchAlertStatus = async () => {
@@ -66,6 +67,7 @@ const AlertStatus = () => {
             </tr>
           </thead>
           <tbody>
+
             {previousAlerts.length > 0 ? (
               previousAlerts.map((alert, index) => (
                 <tr key={index}>

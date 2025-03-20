@@ -2,9 +2,10 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const Mailgen = require('mailgen');
 
-exports.sendMail = (req, res) => {
+const sendMail = (req, res) => {
   const { type, email, name, _id, cpuUsage, errorMessage } = req.body;
-
+  console.log(process.env.MAIL_ID);
+  console.log(process.env.PASS);
   // Create a transporter object using SMTP transport
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -84,3 +85,5 @@ exports.sendMail = (req, res) => {
     res.status(200).json({ message: 'Email sent successfully', response: info.response });
   });
 };
+
+module.exports = { sendMail };

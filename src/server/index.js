@@ -1,42 +1,36 @@
+require("dotenv").config({path: __dirname+"/config.env"});
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
+const config = require("./config/config");
 const { logsRouter } = require("./routes/logRoutes");
 const { metricsRouter } = require("./routes/metrics");
 const { rcaRouter } = require("./routes/rca");
 const { automationRouter } = require("./routes/automation");
-const { sendMail } = require("./controller/alert");
+const { userRouter } = require("./routes/user");
+const { projectRouter } = require("./routes/project");
 
 const app = express();
 const port = 6000;
-
-
-// // **Call sendMail directly (for testing or automated emails)**
-// const mockReq = {
-//   body: {
-//       email: "parthtagalpallewar123@gmail.com",
-//       name: "John Doe",
-//       _id: "123456"
-//   }
-// };
-
-// const mockRes = {
-//   status: (code) => ({
-//       json: (data) => console.log(`Response [${code}]:`, data)
-//   })
-// };
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+mongoose
+    .connect(config.db_url)
+    .then(() => console.log("MongoDB Connected"))
+    .catch(err => console.log(err));
 
 app.use(cors());
+app.use(express.json());
 app.get("/", (req, res) => res.send("Hello World!"));
 app.use("/logs", logsRouter);
 app.use("/metrics", metricsRouter);
 app.use("/rca", rcaRouter);
 app.use("/automation", automationRouter);
+app.use("/user", userRouter);
+app.use("/project", projectRouter);
 
-// Call sendMail after the server starts
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
-  
-  // **Trigger email sending after server startup**
-  // sendMail(mockReq, mockRes);
+  console.log(config);
 });

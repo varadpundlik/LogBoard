@@ -8,10 +8,11 @@ import RootCauseAnalysis from "./pages/RootCause";
 import AutomationStatus from "./pages/Automation";
 import Metrics from "./pages/Metrics";
 import AlertStatus from "./pages/Alert";
-import Login from "./pages/Login";
 import ProjectList from "./pages/ProjectList"
 import Register from "./pages/Register"
 import AddProject from "./pages/AddProject";
+import Login from "./pages/login";
+
 import styles from "./App.module.css"; // Import CSS module
 
 function App() {
