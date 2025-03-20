@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Logs.module.css";
+import styles from "./RootCauseAnalysis.module.css";
+import { ClipLoader } from "react-spinners"; // For a loading spinner
 
 const RootCauseAnalysis = () => {
   const [rootCause, setRootCause] = useState(null);
@@ -10,7 +11,7 @@ const RootCauseAnalysis = () => {
     const fetchRCA = async () => {
       try {
         const response = await fetch("https://logboard-1.onrender.com/rca");
-        // const response = await fetch("http://localhost:5000/rca");
+         // const response = await fetch("http://localhost:5000/rca");
         if (!response.ok) throw new Error("Failed to fetch RCA data");
         const data = await response.json();
         setRootCause(data);
@@ -27,20 +28,28 @@ const RootCauseAnalysis = () => {
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Root Cause Analysis</h2>
-      {loading && <p className="text-center text-gray-500">Loading RCA data...</p>}
-      {error && <p className="text-center text-red-500">Error: {error}</p>}
+    <div className={styles.container}>
+      <h2 className={styles.title}>ROOT CAUSE ANALYSIS</h2>
 
-      {!loading && !error && rootCause && (
-        <div className={styles.tableContainer}>
-          <div className={styles.operationBlock}>
-            <h3 className="text-xl font-semibold text-black">Root Cause</h3>
-            <p className="text-black">{rootCause.root_cause}</p>
+      {loading ? (
+        <div className={styles.loadingContainer}>
+          <ClipLoader color="#4F46E5" size={50} />
+        </div>
+      ) : error ? (
+        <div className={styles.errorMessage}>
+          <strong>Error:</strong> {error}
+        </div>
+      ) : rootCause ? (
+        <div className={styles.contentContainer}>
+          {/* Root Cause Section */}
+          <div className={styles.operationCard}>
+            <h3 className={styles.operationTitle}>Root Cause</h3>
+            <p className={styles.operationSummary}>{rootCause.root_cause}</p>
           </div>
 
-          <div className={styles.operationBlock}>
-            <h3 className="text-xl font-semibold text-black">Evidence</h3>
+          {/* Evidence Section */}
+          <div className={styles.operationCard}>
+            <h3 className={styles.operationTitle}>Evidence</h3>
             <table className={styles.logsTable}>
               <thead>
                 <tr>
@@ -62,18 +71,21 @@ const RootCauseAnalysis = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="2" className="text-center text-gray-500">No evidence available</td>
+                    <td colSpan="2" className={styles.noLogsMessage}>No evidence available</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
 
-          <div className={styles.operationBlock}>
-            <h3 className="text-xl font-semibold text-black">Recommendation</h3>
-            <p className="text-black">{rootCause.recommendation}</p>
+          {/* Recommendation Section */}
+          <div className={styles.operationCard}>
+            <h3 className={styles.operationTitle}>Recommendation</h3>
+            <p className={styles.operationSummary}>{rootCause.recommendation}</p>
           </div>
         </div>
+      ) : (
+        <p className={styles.noLogsMessage}>No RCA data available</p>
       )}
     </div>
   );

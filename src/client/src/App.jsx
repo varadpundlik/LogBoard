@@ -1,32 +1,3 @@
-// import { Route, Routes } from "react-router-dom";
-// import Sidebar from "./components/Sidebar";
-// import Overview from "./pages/Overview";
-// import LogsPage from "./pages/Logs";
-// import Login from "./pages/Login"
-// import styles from "./App.module.css"; 
-
-// function App() {
-// 	return (
-// 		<div className={styles.appContainer}>
-		
-// 			<div className={styles.backgroundOverlay}>
-// 				<div className={styles.gradientOverlay} />
-// 				<div className={styles.blurOverlay} />
-// 			</div>
-
-// 			<Sidebar />
-
-// 			<Routes>
-// 				<Route path='/' element={<Overview />} />
-// 				<Route path='/logs' element={<LogsPage />} />
-// 				<Route path='/login' element={<Login />} />
-		
-// 			</Routes>
-// 		</div>
-// 	);
-// }
-
-// export default App;
 
 import { Route, Routes } from "react-router-dom";
 import DashboardLayout from "./components/DashboardLayout"; // Import the DashboardLayout
@@ -36,7 +7,11 @@ import LogsSummary from "./pages/LogsSummary";
 import RootCauseAnalysis from "./pages/RootCause";
 import AutomationStatus from "./pages/Automation";
 import Metrics from "./pages/Metrics";
-import Login from "./pages/login";
+import AlertStatus from "./pages/Alert";
+import Login from "./pages/Login";
+import ProjectList from "./pages/ProjectList"
+import Register from "./pages/Register"
+import AddProject from "./pages/AddProject";
 import styles from "./App.module.css"; // Import CSS module
 
 function App() {
@@ -104,6 +79,11 @@ function App() {
 
         {/* Route without Dashboard Layout */}
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/addproject" element={<AddProject />} />
+        <Route path="/projectlist" element={<ProjectList />} />
+
+
       </Routes>
     </div>
   );

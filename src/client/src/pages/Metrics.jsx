@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
 import styles from "./Metrics.module.css";
+import { ClipLoader } from "react-spinners"; // Import the loading spinner
 
 // Register all chart components
 ChartJS.register(...registerables);
@@ -16,13 +17,12 @@ const Metrics = () => {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const response = await fetch(
-          "https://logboard-1.onrender.com/metrics/ds-metricbeat-8.17.1-2025.03.16-000002"
+            const response = await fetch(
+          "https://logboard-1.onrender.com/metrics/.ds-metricbeat-8.17.1-2025.03.16-000002"
         );
         // const response = await fetch(
         //   "http://localhost:5000/metrics/.ds-metricbeat-8.17.1-2025.02.06-000001"
         // );
-        
         if (!response.ok) {
           throw new Error("Failed to fetch metrics");
         }
@@ -74,10 +74,14 @@ const Metrics = () => {
   };
 
   if (loading) {
-    return <div className={styles.container}>Loading metrics...</div>;
+    return (
+      <div className={styles.loadingContainer}>
+        <ClipLoader color="#4F46E5" size={50} /> {/* Loading spinner */}
+      </div>
+    );
   }
   if (error) {
-    return <div className={styles.container}>Error: {error}</div>;
+    return <div className={styles.errorMessage}>Error: {error}</div>;
   }
   if (!metrics || !metrics.diskio || !metrics.network) {
     return <div className={styles.container}>No data available for Disk I/O or Network.</div>;
@@ -164,8 +168,8 @@ const Metrics = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>System Metrics</h2>
-  
+      <h2 className={styles.heading}>SYSTEM METRICS</h2>
+
       {/* Interesting Facts Section */}
       <div className={styles.factsContainer}>
         <div className={styles.card}>
@@ -216,7 +220,9 @@ const Metrics = () => {
           <h3 className={styles.sectionTitle}>CPU Usage</h3>
           <div className={styles.chartContainer}>
             {chartLoading ? (
-              <div className={styles.chartLoading}>Loading CPU chart...</div>
+              <div className={styles.chartLoading}>
+                <ClipLoader color="#4F46E5" size={30} /> {/* Loading spinner */}
+              </div>
             ) : (
               <Line data={cpuData} options={chartOptions} />
             )}
@@ -227,7 +233,9 @@ const Metrics = () => {
           <h3 className={styles.sectionTitle}>Memory Usage</h3>
           <div className={styles.chartContainer}>
             {chartLoading ? (
-              <div className={styles.chartLoading}>Loading Memory chart...</div>
+              <div className={styles.chartLoading}>
+                <ClipLoader color="#4F46E5" size={30} /> {/* Loading spinner */}
+              </div>
             ) : (
               <Bar data={memoryData} options={chartOptions} />
             )}
@@ -238,7 +246,9 @@ const Metrics = () => {
           <h3 className={styles.sectionTitle}>Disk I/O</h3>
           <div className={styles.chartContainer}>
             {chartLoading ? (
-              <div className={styles.chartLoading}>Loading Disk I/O chart...</div>
+              <div className={styles.chartLoading}>
+                <ClipLoader color="#4F46E5" size={30} /> {/* Loading spinner */}
+              </div>
             ) : (
               <Line data={diskioData} options={chartOptions} />
             )}
@@ -249,7 +259,9 @@ const Metrics = () => {
           <h3 className={styles.sectionTitle}>Network Throughput</h3>
           <div className={styles.chartContainer}>
             {chartLoading ? (
-              <div className={styles.chartLoading}>Loading Network chart...</div>
+              <div className={styles.chartLoading}>
+                <ClipLoader color="#4F46E5" size={30} /> {/* Loading spinner */}
+              </div>
             ) : (
               <Bar data={networkData} options={chartOptions} />
             )}

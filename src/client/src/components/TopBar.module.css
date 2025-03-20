@@ -1,13 +1,102 @@
 .topBar {
-    background-color: #3e475f;
-    padding: 10px 20px;
-    width:100vw;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-  }
-  
-  .topBar h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: white;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #52528a;
+  padding: 8px 16px; /* Reduced padding */
+  width: 77vw;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* Slightly smaller border radius */
+}
+
+.leftSection h1 {
+  margin: 0;
+  font-size: 1.25rem; /* Smaller font size */
+  color: white;
+  font-weight: 500; /* Medium font weight */
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Reduced gap between elements */
+}
+
+/* Dropdown Styles */
+.dropdown {
+  position: relative;
+}
+
+.dropdownButton {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Space between text and icon */
+  padding: 6px 12px; /* Smaller padding */
+  background-color: #8585bc;
+  color: white;
+  border: none;
+  border-radius: 6px; /* Smaller border radius */
+  font-size: 0.875rem; /* Smaller font size */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdownButton:hover {
+  background-color: #c0c0e7;
+}
+
+.dropdownIcon {
+  transition: transform 0.3s ease; /* Add rotation animation */
+}
+
+.dropdownContent {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #3e475f;
+  border-radius: 6px; /* Smaller border radius */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  min-width: 150px;
+}
+
+.dropdownItem {
+  padding: 8px 12px; /* Smaller padding */
+  color: white;
+  font-size: 0.875rem; /* Smaller font size */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdownItem:hover {
+  background-color: #485260;
+}
+
+/* Add Project Button */
+.addProjectButton {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Space between icon and text */
+  padding: 6px 12px; /* Smaller padding */
+  background-color: #8585bc;
+  color: white;
+  border: none;
+  border-radius: 6px; /* Smaller border radius */
+  font-size: 0.875rem; /* Smaller font size */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addProjectButton:hover {
+  background-color: #c0c0e7;
+}
+
+.addIcon {
+  transition: transform 0.3s ease; /* Add hover animation */
+}
+
+.addProjectButton:hover .addIcon {
+  transform: scale(1.1); /* Slightly enlarge the icon on hover */
+}

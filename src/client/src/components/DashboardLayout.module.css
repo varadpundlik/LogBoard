@@ -24,4 +24,14 @@
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  /* background-color:#363a45; */
+  background-color: var(--background-color);
+  background-color: #232347;
+  background: hsla(240, 27%, 31%, 1);
+
+  background: linear-gradient(90deg, hsla(240, 27%, 31%, 1) 0%, hsla(240, 9%, 9%, 1) 100%);
+  
+  background: -moz-linear-gradient(90deg, hsla(240, 27%, 31%, 1) 0%, hsla(240, 9%, 9%, 1) 100%);
+  
+  background: -webkit-linear-gradient(90deg, hsla(240, 27%, 31%, 1) 0%, hsla(240, 9%, 9%, 1) 100%);
 }

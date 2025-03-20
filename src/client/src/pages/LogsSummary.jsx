@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Logs.module.css";
+import styles from "./LogsSummary.module.css";
+import { ClipLoader } from "react-spinners";
 
 const LogsTable = () => {
   const [operations, setOperations] = useState([]);
@@ -27,17 +28,23 @@ const LogsTable = () => {
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-bold text-gray-800 mb-2  text-center">System Logs</h2>
-      {loading && <p className="text-center text-gray-500">Loading logs...</p>}
-      {error && <p className="text-center text-red-500">Error: {error}</p>}
-
-      {!loading && !error && operations.length > 0 ? (
-        <div className={styles.tableContainer}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>LOGS SUMMARIZATION</h2>
+      
+      {loading ? (
+        <div className={styles.loadingContainer}>
+          <ClipLoader color="#4F46E5" size={50} />
+        </div>
+      ) : error ? (
+        <div className={styles.errorMessage}>
+          <strong>Error:</strong> {error}
+        </div>
+      ) : operations.length > 0 ? (
+        <div>
           {operations.map((operation, index) => (
-            <div key={index} className={styles.operationBlock}>
-              <h3 className="text-xl font-semibold text-black">{operation.operation}</h3>
-              <p className="text-black">{operation.summary}</p>
+            <div key={index} className={styles.operationCard}>
+              <h3 className={styles.operationTitle}>{operation.operation}</h3>
+              <p className={styles.operationSummary}>{operation.summary}</p>
               <table className={styles.logsTable}>
                 <thead>
                   <tr>
@@ -59,7 +66,7 @@ const LogsTable = () => {
                     })
                   ) : (
                     <tr>
-                      <td colSpan="2" className="text-center text-gray-500">No logs available</td>
+                      <td colSpan="2" className={styles.noLogsMessage}>No logs available</td>
                     </tr>
                   )}
                 </tbody>
@@ -68,7 +75,7 @@ const LogsTable = () => {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-500">No logs available</p>
+        <p className={styles.noLogsMessage}>No logs available</p>
       )}
     </div>
   );
