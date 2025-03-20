@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css"; // Use the same styles as Login
 import loginImage from "../assets/Loginpage_image.png"; // Use the same image as Login
+import axios from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const Register = () => {
   const [error, setError] = useState("");
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Check if passwords match
@@ -18,7 +19,17 @@ const Register = () => {
       setError("Passwords do not match");
       return;
     }
-
+    const response =await axios.post('https://logboard-1.onrender.com/user/register', {
+      email: email,
+      password: password,
+      username: username
+    }).then((response) => {
+      console.log(response);
+    }).catch((error) => {
+      console.log(error);
+    }
+    );
+  
     console.log("Register form submitted");
 
     // Add your registration logic here (e.g., API call, validation)

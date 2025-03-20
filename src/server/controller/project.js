@@ -41,11 +41,17 @@ const addProject = asyncHandler(async (req, res) => {
 
 // Get all projects with user email populated
 const getProjects = asyncHandler(async (req, res) => {
+  try{
   const projects = await Project.find()
     .populate("owner", "name email") // Populate owner with name and email
     .populate("accessible_to", "name email"); // Populate accessible users with name and email
 
   res.status(200).json(projects);
+  }catch(err){
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
+
 });
 // Get projects where the user is either owner or in accessible_to
 const getUserProjects = asyncHandler(async (req, res) => {

@@ -1,16 +1,30 @@
 import { useNavigate } from "react-router-dom";
+import React from "react";
 import styles from "./Login.module.css";
 import loginImage from "../assets/Loginpage_image.png";
+import axios from "axios";
+import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
     console.log("Login form submitted"); // Debugging: Check if this logs
 
-    // Add your login logic here (e.g., API call, validation)
+    const response =await axios.post('https://logboard-1.onrender.com/user/login', {
+      email: email,
+      password: password
+    }).then((response) => {
+      console.log(response);
+    }).catch((error) => {
+      console.log(error);
+    }
+    );
+
     const isLoginSuccessful = true; // Replace with actual login logic
 
     if (isLoginSuccessful) {
@@ -19,6 +33,13 @@ const Login = () => {
       console.error("Login failed"); // Handle login failure
     }
   };
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+  }
+
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
 
   return (
     <div className={styles.abc}>
@@ -42,6 +63,7 @@ const Login = () => {
               id="email"
               placeholder="Enter your email"
               className={styles.inputField}
+              onChange={handleEmailChange}
               required
             />
           </div>
@@ -55,6 +77,7 @@ const Login = () => {
               id="password"
               placeholder="Enter your password"
               className={styles.inputField}
+              onChange={handlePasswordChange}
               required
             />
           </div>

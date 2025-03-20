@@ -30,6 +30,7 @@ const register = asyncHandler(async (req, res) => {
 
     return res.status(201).json({ _id: user.id, email: user.email });
   } catch (error) {
+    console,log(error);
     return res.status(400).json({ message: "User data is not valid: " + error.message });
   }
 });
@@ -62,6 +63,7 @@ const login = asyncHandler(async (req, res) => {
       return res.status(401).json({ message: "Email or password is not valid" });
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Internal Server Error: " + error.message });
   }
 });
