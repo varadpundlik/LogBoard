@@ -10,7 +10,8 @@ const AutomationStatus = () => {
   useEffect(() => {
     const fetchAutomationStatus = async () => {
       try {
-        const response = await fetch("https://logboard-1.onrender.com/automation");
+        const index= JSON.parse(localStorage.getItem("selectedProject")).filebeat_index;
+        const response = await fetch(`https://logboard-1.onrender.com/automation/${index}`);
         if (!response.ok) throw new Error("Failed to fetch automation status");
         const data = await response.json();
         setAutomationStatus(data);

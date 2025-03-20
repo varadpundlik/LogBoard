@@ -3,18 +3,18 @@ import styles from "./RootCauseAnalysis.module.css";
 import { ClipLoader } from "react-spinners"; // For a loading spinner
 
 const RootCauseAnalysis = () => {
-  const [rootCause, setRootCause] = useState(null);
+  const [rootCauses, setRootCauses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchRCA = async () => {
       try {
-        const response = await fetch("https://logboard-1.onrender.com/rca");
-         // const response = await fetch("http://localhost:5000/rca");
+        const index = JSON.parse(localStorage.getItem("selectedProject")).filebeat_index;
+        const response = await fetch(`https://logboard-1.onrender.com/rca/${index}`);
         if (!response.ok) throw new Error("Failed to fetch RCA data");
         const data = await response.json();
-        setRootCause(data);
+        setRootCauses(data.root_causes || []); // Ensure it's always an array
       } catch (err) {
         setError(err.message);
       } finally {
@@ -39,51 +39,57 @@ const RootCauseAnalysis = () => {
         <div className={styles.errorMessage}>
           <strong>Error:</strong> {error}
         </div>
-      ) : rootCause ? (
-        <div className={styles.contentContainer}>
-          {/* Root Cause Section */}
-          <div className={styles.operationCard}>
-            <h3 className={styles.operationTitle}>Root Cause</h3>
-            <p className={styles.operationSummary}>{rootCause.root_cause}</p>
-          </div>
+      ) : rootCauses.length > 0 ? (
+        rootCauses.map((rootCause, index) => (
+          <div key={index} className={styles.contentContainer}>
+            {/* Root Cause Section */}
+            <div className={styles.operationCard}>
+              <h3 className={styles.operationTitle}>Root Cause {index + 1}</h3>
+              <p className={styles.operationSummary}>{rootCause.root_cause}</p>
+            </div>
+            <div className={styles.operationCard}>
+              <h3 className={styles.operationTitle}>Status: </h3>
+              <p className={styles.operationSummary}>{rootCause.status}</p>
+            </div>
 
-          {/* Evidence Section */}
-          <div className={styles.operationCard}>
-            <h3 className={styles.operationTitle}>Evidence</h3>
-            <table className={styles.logsTable}>
-              <thead>
-                <tr>
-                  <th>Timestamp</th>
-                  <th>Message</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rootCause.evidence.length > 0 ? (
-                  rootCause.evidence.map((log, index) => {
-                    const [timestamp, ...messageParts] = log.split(" ");
-                    const message = messageParts.join(" ");
-                    return (
-                      <tr key={index}>
-                        <td>{timestamp.replace("[", "").replace("]", "")}</td>
-                        <td>{message}</td>
-                      </tr>
-                    );
-                  })
-                ) : (
+            {/* Evidence Section */}
+            <div className={styles.operationCard}>
+              <h3 className={styles.operationTitle}>Evidence</h3>
+              <table className={styles.logsTable}>
+                <thead>
                   <tr>
-                    <td colSpan="2" className={styles.noLogsMessage}>No evidence available</td>
+                    <th>Timestamp</th>
+                    <th>Message</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {rootCause.evidence.length > 0 ? (
+                    rootCause.evidence.map((log, logIndex) => {
+                      const [timestamp, ...messageParts] = log.split(" ");
+                      const message = messageParts.join(" ");
+                      return (
+                        <tr key={logIndex}>
+                          <td>{timestamp.replace("[", "").replace("]", "")}</td>
+                          <td>{message}</td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="2" className={styles.noLogsMessage}>No evidence available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
 
-          {/* Recommendation Section */}
-          <div className={styles.operationCard}>
-            <h3 className={styles.operationTitle}>Recommendation</h3>
-            <p className={styles.operationSummary}>{rootCause.recommendation}</p>
+            {/* Recommendation Section */}
+            <div className={styles.operationCard}>
+              <h3 className={styles.operationTitle}>Recommendation</h3>
+              <p className={styles.operationSummary}>{rootCause.recommendation}</p>
+            </div>
           </div>
-        </div>
+        ))
       ) : (
         <p className={styles.noLogsMessage}>No RCA data available</p>
       )}
