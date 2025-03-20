@@ -216,8 +216,7 @@ automation_prompt_template = PromptTemplate(
 def fetch_new_logs(index_name):
     global last_processed_timestamps
 
-    query = {"size": 1000, "query": {"range": {"@timestamp": {"gt": last_processed_timestamps.get(index_name, "now-1d")}}}} \
-        if index_name in last_processed_timestamps else {"size": 1000, "query": {"match_all": {}}}
+    query = {"size": 1000, "query": {"match_all": {}}}
 
     response = es.search(index=index_name, body=query)
 
