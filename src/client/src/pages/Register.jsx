@@ -19,18 +19,22 @@ const Register = () => {
       setError("Passwords do not match");
       return;
     }
-    const response =await axios.post('https://logboard-1.onrender.com/user/register', {
-      email: email,
-      password: password,
-      username: username
-    }).then((response) => {
-      console.log(response);
-    }).catch((error) => {
-      console.log(error);
+    try {
+      const response = await axios.post(
+        "https://logboard-1.onrender.com/user/register",
+        {
+          email,
+          password,
+          username,
+        }
+      );
+      console.log("Registration successful:", response.data);
+      navigate("/login"); // Redirect to login after successful registration
+    } catch (error) {
+      console.error("Registration failed:", error.response?.data || error.message);
+      setError(error.response?.data?.message || "Registration failed");
     }
-    );
   
-    console.log("Register form submitted");
 
     // Add your registration logic here (e.g., API call, validation)
     const isRegistrationSuccessful = true; // Replace with actual logic

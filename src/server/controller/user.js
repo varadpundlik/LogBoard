@@ -4,7 +4,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/user");
 
 // Hardcoded secret for JWT
-const ACCESS_TOKEN_SECRET = "medezz123";
+const ACCESS_TOKEN_SECRET = "LogBoard";
 
 // Register new user
 const register = asyncHandler(async (req, res) => {
