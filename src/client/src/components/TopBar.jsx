@@ -1,19 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronDown, Plus } from "lucide-react"; // Import icons
 import styles from "./TopBar.module.css";
+import {useNavigate} from "react-router-dom";
 
 function TopBar() {
-  const [selectedProject, setSelectedProject] = useState("Project Alpha"); // Default selected project
+  const [selectedProject, setSelectedProject] = useState(
+    JSON.parse(localStorage.getItem("selectedProject"))?.name || "New Project"
+  );
+  const [projects, setProjects] = useState([]); // List of projects
+  const [projectObject, setProjectObject] = useState([]); // List of projects
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown state
+  const navigate = useNavigate();
 
-  // Mock projects data
-  const projects = ["Project Alpha", "Project Beta", "Project Gamma"];
+  // Fetch projects from API
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch("https://logboard-1.onrender.com/project/getProject");
+        if (!response.ok) throw new Error("Failed to fetch projects");
+        const data = await response.json();
+        const projectNames = data.map((project) => project.name);
+        setProjectObject(data);
+        setProjects(projectNames);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   // Handle project selection
   const handleProjectSelect = (project) => {
-    setSelectedProject(project);
+    console.log("Selected project:", JSON.stringify(project));
+    setSelectedProject(project.name);
+    localStorage.setItem("selectedProject", JSON.stringify(project)); // Save selection to localStorage
     setIsDropdownOpen(false); // Close dropdown after selection
   };
+
+  const handleAddProject = () => {
+    // Add project logic here
+    navigate("/addproject");
+    console.log("Add project clicked");
+  }
 
   return (
     <div className={styles.topBar}>
@@ -30,7 +59,7 @@ function TopBar() {
             className={styles.dropdownButton}
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            Switch Project <ChevronDown size={16} className={styles.dropdownIcon} /> {/* Dropdown icon */}
+            Switch Project <ChevronDown size={16} className={styles.dropdownIcon} />
           </button>
           {isDropdownOpen && (
             <div className={styles.dropdownContent}>
@@ -38,7 +67,7 @@ function TopBar() {
                 <div
                   key={project}
                   className={styles.dropdownItem}
-                  onClick={() => handleProjectSelect(project)}
+                  onClick={() => handleProjectSelect(projectObject.find((p) => p.name === project))}
                 >
                   {project}
                 </div>
@@ -48,9 +77,8 @@ function TopBar() {
         </div>
 
         {/* Add Project Button */}
-        <button className={styles.addProjectButton}>
-          <Plus size={16} className={styles.addIcon} /> {/* Add icon */}
-          Add Project
+        <button className={styles.addProjectButton} onClick={handleAddProject}>
+          <Plus size={16} className={styles.addIcon} /> Add Project
         </button>
       </div>
     </div>

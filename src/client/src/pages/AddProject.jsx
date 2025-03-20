@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./AddProject.module.css";
+import axios from "axios";
 
 const AddProject = () => {
   const navigate = useNavigate();
@@ -33,7 +34,20 @@ const AddProject = () => {
       setError("All fields are required");
       return;
     }
-
+    axios.post('https://logboard-1.onrender.com/project/addProject', {
+      name: formData.name,
+      description: formData.description,
+      owner_email: formData.owner_email,
+      accessible_to_emails: formData.accessible_to_emails,
+      deployment_ip: formData.deployment_ip,
+      filebeat_index: formData.filebeat_index,
+      metricbeat_index: formData.metricbeat_index
+    }).then((response) => {
+      console.log(response);
+    }).catch((error) => {
+      console.log(error);
+    }
+    );
     console.log("Project form submitted:", formData);
 
     // Add your project creation logic here (e.g., API call)
