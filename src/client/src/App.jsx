@@ -76,6 +76,15 @@ function App() {
           }
         />
 
+        <Route
+          path="/alerts"
+          element={
+            <DashboardLayout>
+              <AlertStatus />
+            </DashboardLayout>
+          }
+        />
+
 
         {/* Route without Dashboard Layout */}
         <Route path="/login" element={<Login />} />

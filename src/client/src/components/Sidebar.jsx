@@ -18,19 +18,11 @@ import styles from "./Sidebar.module.css";
 const iconcolor = "#c4c7db";
 const SIDEBAR_ITEMS = [
   { name: "Overview", icon: BarChart2, color: "#7f818d", href: "/" },
-<<<<<<< Updated upstream
-  { name: "Logs Explorer", icon: ShoppingBag, color: "#7f818d", href: "/logs" },
-  { name: "System Metrics", icon: Users, color: "#7f818d", href: "/metrics" },
-  { name: "Logs summarization", icon: TrendingUp, color: "#7f818d", href: "/logs-summary" },
-  { name: "Alerts", icon: DollarSign, color: "#7f818d", href: "/sales" },
-  { name: "Root Cause Analysis", icon: ShoppingCart, color: "#7f818d", href: "/root-cause" },
-=======
   { name: "Logs Explorer", icon: FileText, color: "#7f818d", href: "/logs" },
   { name: "System Metrics", icon: Cpu, color: "#7f818d", href: "/metrics" },
   { name: "Logs Summarization", icon: BookText, color: "#7f818d", href: "/logs-summary" },
   { name: "Alerts", icon: ShieldAlert, color: "#7f818d", href: "/alerts" },
   { name: "Root Cause Analysis", icon: Bug, color: "#7f818d", href: "/root-cause" },
->>>>>>> Stashed changes
   { name: "Automation", icon: Settings, color: "#7f818d", href: "/automation" },
   { name: "Sign Out", icon: LogOut, color: "#ff8700", href: "/login" }, // Add Sign Out to the list
 ];
