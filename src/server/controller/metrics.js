@@ -12,7 +12,7 @@ const client = new Client({
 
 const fetchMetrics = async (req, res) => {
   const { index } = req.params;
-  const limit = 50; // Hardcoded limit for the latest 5 entries per metric
+  const limit = 5; // Hardcoded limit for the latest 5 entries per metric
 
   try {
     // Function to fetch the latest `limit` records for a specific field

@@ -57,7 +57,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           {/* <LayoutDashboard size={30} style={{ color: "#ff8700", minWidth: "20px" }} /> */}
-          <img src={logo} alt="logboard" width="40" height="40" />
+          <img src={logo} alt="logboard" width="40" height="40"  />
           <AnimatePresence>
             {isSidebarOpen && (
               <motion.span
