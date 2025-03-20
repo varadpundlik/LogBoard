@@ -14,6 +14,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Sidebar.module.css";
+import logo from "../../public/output.png";
 
 const iconcolor = "#c4c7db";
 const SIDEBAR_ITEMS = [
@@ -55,7 +56,8 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           whileTap={{ scale: 0.9 }}
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          <LayoutDashboard size={30} style={{ color: "#ff8700", minWidth: "20px" }} />
+          {/* <LayoutDashboard size={30} style={{ color: "#ff8700", minWidth: "20px" }} /> */}
+          <img src={logo} alt="logboard" width="40" height="40" />
           <AnimatePresence>
             {isSidebarOpen && (
               <motion.span
