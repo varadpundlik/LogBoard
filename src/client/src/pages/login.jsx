@@ -20,6 +20,7 @@ const Login = () => {
       password: password
     }).then((response) => {
       console.log(response);
+      localStorage.setItem("accessToken", response.data.accessToken);
     }).catch((error) => {
       console.log(error);
     }
