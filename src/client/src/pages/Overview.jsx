@@ -203,18 +203,18 @@ const Overview = ({ projectId }) => {
       {/* Charts Section */}
       <div className={styles.chartsContainer}>
         <div className={styles.chartWrapper}>
+          <h3>Error Distribution</h3>
+          <div className={styles.chart}>
+            <Bar data={errorDistributionData} options={chartOptions} />
+          </div>
+        </div>
+        <div className={styles.chartWrapper}>
           <h3>Logs Over Time</h3>
           <div className={styles.chart}>
             <Line data={logsOverTimeData} options={chartOptions} />
           </div>
         </div>
 
-        <div className={styles.chartWrapper}>
-          <h3>Error Distribution</h3>
-          <div className={styles.chart}>
-            <Bar data={errorDistributionData} options={chartOptions} />
-          </div>
-        </div>
       </div>
 
       {/* Recent Logs */}
