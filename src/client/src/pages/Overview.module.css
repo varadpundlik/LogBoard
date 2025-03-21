@@ -1,0 +1,188 @@
+/* components/Overview/Overview.module.css */
+.container {
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(90deg, hsla(240, 27%, 31%, 1) 0%, hsla(240, 9%, 9%, 1) 100%);
+    color: #e5e7eb;
+  }
+  
+  .loading, .error {
+    color: #e5e7eb;
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+  
+  .summaryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .metricCard {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .metricCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  .metricCard h3 {
+    color: #a5b4fc;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .metricValue {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
+  
+  /* Status Indicators */
+  .statusContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .statusIndicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4b5563;
+  }
+  
+  .online .statusIndicator {
+    background-color: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+  }
+  
+  .offline .statusIndicator {
+    background-color: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+  }
+  
+  /* Error/Warning Indicators */
+  .errorDot {
+    background-color: #dc2626;
+    box-shadow: 0 0 6px rgba(220, 38, 38, 0.2);
+  }
+  
+  .warningDot {
+    background-color: #f59e0b;
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.2);
+  }
+  
+  /* Charts */
+  .chartWrapper {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .chartWrapper h3 {
+    color: #a5b4fc;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Logs List */
+  .logsContainer {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .logsList {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .logEntry {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s;
+  }
+  
+  .logEntry:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  .logTime {
+    color: #818cf8;
+  }
+  
+  /* Color Variants */
+  .cpuCard {
+    border-left: 4px solid #4f46e5;
+  }
+  
+  .memoryCard {
+    border-left: 4px solid #0ea5e9;
+  }
+  
+  .diskCard {
+    border-left: 4px solid #8b5cf6;
+  }
+  
+  .networkCard {
+    border-left: 4px solid #f59e0b;
+  }
+  
+  .logsCard {
+    border-left: 4px solid #818cf8;
+  }
+  
+  .errorsCard {
+    border-left: 4px solid #dc2626;
+  }
+  
+  .error {
+    color: #f87171;
+  }
+  
+  .warning {
+    color: #fbbf24;
+  }
+  
+  .info {
+    color: #818cf8;
+  }
+  
+  /* Scrollbar Styling */
+  .logsList::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .logsList::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  .logsList::-webkit-scrollbar-thumb {
+    background: #4f46e5;
+    border-radius: 4px;
+  }
+  
+  /* Chart Text Colors */
+  .chartjs-render-monitor {
+    color: #e5e7eb !important;
+  }
+  
+  .chartjs-grid line {
+    color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .chartjs-axis-title {
+    color: #a5b4fc !important;
+  }
