@@ -244,19 +244,6 @@ const Metrics = () => {
         </section>
 
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>Disk I/O</h3>
-          <div className={styles.chartContainer}>
-            {chartLoading ? (
-              <div className={styles.chartLoading}>
-                <ClipLoader color="#4F46E5" size={30} /> {/* Loading spinner */}
-              </div>
-            ) : (
-              <Line data={diskioData} options={chartOptions} />
-            )}
-          </div>
-        </section>
-
-        <section className={styles.section}>
           <h3 className={styles.sectionTitle}>Network Throughput</h3>
           <div className={styles.chartContainer}>
             {chartLoading ? (
@@ -265,6 +252,18 @@ const Metrics = () => {
               </div>
             ) : (
               <Bar data={networkData} options={chartOptions} />
+            )}
+          </div>
+        </section>
+        <section className={styles.section}>
+          <h3 className={styles.sectionTitle}>Disk I/O</h3>
+          <div className={styles.chartContainer}>
+            {chartLoading ? (
+              <div className={styles.chartLoading}>
+                <ClipLoader color="#4F46E5" size={30} /> {/* Loading spinner */}
+              </div>
+            ) : (
+              <Line data={diskioData} options={chartOptions} />
             )}
           </div>
         </section>
