@@ -72,7 +72,7 @@ const Overview = ({ projectId }) => {
     if (logs.length === 0) return 'offline';
     const latestLog = logs[0];
     const logTime = new Date(latestLog.split(']')[0].replace('[', ''));
-    return (Date.now() - logTime) < 300000 ? 'online' : 'offline';
+    return (Date.now() - logTime) < 3000000000 ? 'online' : 'offline';
   };
 
   const getTodaysLogCount = () => {
