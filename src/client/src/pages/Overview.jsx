@@ -150,7 +150,7 @@ const Overview = ({ projectId }) => {
           <div className={styles.secondaryText}>
             Last hour: {(logs.filter(log => 
               new Date(log.split(']')[0].replace('[', '')).getHours() === new Date().getHours()
-            ).length)-20}
+            ).length)}
           </div>
         </div>
 
