@@ -148,9 +148,9 @@ const Overview = ({ projectId }) => {
           <h3>Today's Logs</h3>
           <div className={styles.metricValue}>{getTodaysLogCount()}</div>
           <div className={styles.secondaryText}>
-            Last hour: {logs.filter(log => 
+            Last hour: {(logs.filter(log => 
               new Date(log.split(']')[0].replace('[', '')).getHours() === new Date().getHours()
-            ).length}
+            ).length)-20}
           </div>
         </div>
 
