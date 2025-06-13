@@ -12,7 +12,7 @@ const LogsTable = () => {
       try {
         const index = JSON.parse(localStorage.getItem("selectedProject")).filebeat_index;
         console.log(index);
-        const response = await fetch(`https://logboard-1.onrender.com/logs/summarize/${index}`);
+        const response = await fetch(`http://localhost:5000/logs/summarize/${index}`);
         // const response = await fetch("http://localhost:5000/logs/summarize");
         if (!response.ok) throw new Error("Failed to fetch logs");
         const data = await response.json();

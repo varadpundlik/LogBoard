@@ -265,7 +265,7 @@ def process_logs(index_name):
 # Function to fetch indices from API and start threads
 def initialize_log_processing():
     try:
-        response = requests.get("https://logboard-1.onrender.com/project/getProject")
+        response = requests.get("http://localhost:5000/project/getProject")
         if response.status_code == 200:
             projects = response.json()
             for project in projects:

@@ -16,7 +16,7 @@ function TopBar() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch("https://logboard-1.onrender.com/project/getProject");
+        const response = await fetch("http://localhost:5000/project/getProject");
         if (!response.ok) throw new Error("Failed to fetch projects");
         const data = await response.json();
         const projectNames = data.map((project) => project.name);

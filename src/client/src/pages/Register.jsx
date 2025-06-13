@@ -21,7 +21,7 @@ const Register = () => {
     }
     try {
       const response = await axios.post(
-        "https://logboard-1.onrender.com/user/register",
+        "http://localhost:5000/user/register",
         {
           email,
           password,

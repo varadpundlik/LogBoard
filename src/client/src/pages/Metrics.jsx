@@ -19,7 +19,7 @@ const Metrics = () => {
       try {
         const index= JSON.parse(localStorage.getItem("selectedProject")).metricbeat_index;
             const response = await fetch(
-          `https://logboard-1.onrender.com/metrics/${index}`
+          `http://localhost:5000/metrics/${index}`
         );
         // const response = await fetch(
         //   "http://localhost:5000/metrics/.ds-metricbeat-8.17.1-2025.02.06-000001"
