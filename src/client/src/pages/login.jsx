@@ -15,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     console.log("Login form submitted"); // Debugging: Check if this logs
 
-    const response =await axios.post('http://localhost:5000/user/login', {
+    const response =await axios.post('http://localhost:6000/user/login', {
       email: email,
       password: password
     }).then((response) => {

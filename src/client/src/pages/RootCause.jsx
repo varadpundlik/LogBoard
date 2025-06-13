@@ -11,7 +11,7 @@ const RootCauseAnalysis = () => {
     const fetchRCA = async () => {
       try {
         const index = JSON.parse(localStorage.getItem("selectedProject")).filebeat_index;
-        const response = await fetch(`http://localhost:5000/rca/${index}`);
+        const response = await fetch(`http://localhost:6000/rca/${index}`);
         if (!response.ok) throw new Error("Failed to fetch RCA data");
         const data = await response.json();
         setRootCauses(data.root_causes || []); // Ensure it's always an array

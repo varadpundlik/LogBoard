@@ -11,7 +11,7 @@ const AutomationStatus = () => {
     const fetchAutomationStatus = async () => {
       try {
         const index= JSON.parse(localStorage.getItem("selectedProject")).filebeat_index;
-        const response = await fetch(`http://localhost:5000/automation/${index}`);
+        const response = await fetch(`http://localhost:6000/automation/${index}`);
         if (!response.ok) throw new Error("Failed to fetch automation status");
         const data = await response.json();
         setAutomationStatus(data);

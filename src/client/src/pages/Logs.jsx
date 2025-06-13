@@ -18,8 +18,8 @@ const LogsTable = () => {
       try {
         const index= JSON.parse(localStorage.getItem("selectedProject")).filebeat_index;
         const response = await fetch(
-          `http://localhost:5000/logs/${index}`
-          // "http://localhost:5000/logs/.ds-filebeat-8.17.1-2025.02.04-000001"
+          `http://localhost:6000/logs/${index}`
+          // "http://localhost:6000/logs/.ds-filebeat-8.17.1-2025.02.04-000001"
         );
         if (!response.ok) throw new Error("Failed to fetch logs");
 
@@ -51,8 +51,8 @@ const LogsTable = () => {
     try {
       // Send the search query to the backend API
       const response = await fetch(
-         "http://localhost:5000/logs/.ds-filebeat-8.17.0-2025.02.09-000002/search",
-        // "http://localhost:5000/logs/.ds-filebeat-8.17.1-2025.02.04-000001/search",
+         "http://localhost:6000/logs/.ds-filebeat-8.17.0-2025.02.09-000002/search",
+        // "http://localhost:6000/logs/.ds-filebeat-8.17.1-2025.02.04-000001/search",
         {
           method: "POST",
           headers: {

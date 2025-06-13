@@ -34,7 +34,7 @@ const AddProject = () => {
       setError("All fields are required");
       return;
     }
-    axios.post('http://localhost:5000/project/addProject', {
+    axios.post('http://localhost:6000/project/addProject', {
       name: formData.name,
       description: formData.description,
       owner_email: formData.owner_email,

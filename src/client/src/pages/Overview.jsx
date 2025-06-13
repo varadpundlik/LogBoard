@@ -39,12 +39,12 @@ const Overview = ({ projectId }) => {
       try {
         const selectedProject = JSON.parse(localStorage.getItem("selectedProject"));
 		const [logsRes, metricsRes] = await Promise.all([
-			fetch(`http://localhost:5000/logs/${selectedProject.filebeat_index}`),
-			fetch(`http://localhost:5000/metrics/${selectedProject.metricbeat_index}`)
+			fetch(`http://localhost:6000/logs/${selectedProject.filebeat_index}`),
+			fetch(`http://localhost:6000/metrics/${selectedProject.metricbeat_index}`)
 		  ]);
         // const [logsRes, metricsRes] = await Promise.all([
-        //   fetch(`http://localhost:5000/logs/${selectedProject.filebeat_index}`),
-        //   fetch(`http://localhost:5000/metrics/${selectedProject.metricbeat_index}`)
+        //   fetch(`http://localhost:6000/logs/${selectedProject.filebeat_index}`),
+        //   fetch(`http://localhost:6000/metrics/${selectedProject.metricbeat_index}`)
         // ]);
 
         const logsData = logsRes.ok ? await logsRes.json() : [];
