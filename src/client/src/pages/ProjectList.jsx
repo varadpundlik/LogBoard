@@ -26,7 +26,7 @@ const Projects = () => {
   // Simulate fetching projects from an API
   const fetchProjects = async (email) => {
     // Replace this with your actual API call
-    const response = await fetch("http://localhost:6000/project/getProject");
+    const response = await fetch("https://logboard-1.onrender.com/project/getProject");
     if (!response.ok) throw new Error("Failed to fetch projects");
     const data = await response.json();
     setProjects(data);

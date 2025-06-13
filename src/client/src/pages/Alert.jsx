@@ -11,7 +11,7 @@ const AlertStatus = () => {
   useEffect(() => {
     const fetchAlertStatus = async () => {
       try {
-        const response = await fetch("http://localhost:6000/logs/.ds-filebeat-8.17.0-2025.02.09-000002/alert", {
+        const response = await fetch("https://logboard-1.onrender.com/logs/.ds-filebeat-8.17.0-2025.02.09-000002/alert", {
           method: "POST",
           headers: { "Content-Type": "application/json" }
         });
